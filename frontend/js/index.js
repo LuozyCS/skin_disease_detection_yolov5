@@ -30,7 +30,7 @@ function preventDefaults(e) {
 };
 
 
-// 发送图片到服务器, 接收检测结果，并在canvas上绘图 
+// 发送图片到服务器, 接收检测结果,就是后端传过来的box，并在canvas上绘图 
 function communicate(img_base64_url) {
 //使用AJAX
   $.ajax({
