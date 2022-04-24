@@ -2,6 +2,8 @@ import os
 import shutil
 import time
 from pathlib import Path
+from turtle import width
+from typing import Tuple
 
 import cv2
 import torch
@@ -13,6 +15,8 @@ from utils.plots import Annotator, colors
 from backend.flask_id2name import id2name
 
 def predict(opt, model, img):
+    hight_thres = img.shape[1] * 0.05
+    width_thres = img.shape[0] * 0.05
     out, source, view_img, save_img, save_txt, imgsz = \
         opt['output'], opt['source'], opt['view_img'], opt['save_img'], opt['save_txt'], opt['imgsz']
 
@@ -49,14 +53,16 @@ def predict(opt, model, img):
         if img.ndimension() == 3:
             img = img.unsqueeze(0)
 
+        """
+        第一次：标准阈值模型预测（预测位置）
+        """
         # Inference
-        t1 = time_sync()
-        
+        t1 = time_sync()       
         # 前向推理
         pred = model(img, augment=opt['augment'])[0] 
         # Apply NMS（非极大抑制）
         pred = non_max_suppression(pred, opt['conf_thres'], opt['iou_thres'], classes=opt['classes'], agnostic=opt['agnostic_nms'])
-       
+        #pred = non_max_suppression(pred1, 0.01, 0.2, classes=opt['classes'], agnostic=opt['agnostic_nms']) 
         t2 = time_sync()
 
         # Process detections
@@ -99,7 +105,52 @@ def predict(opt, model, img):
             if save_img:
                 if dataset.mode == 'images':
                     cv2.imwrite(save_path, im0)
+        """
+        第二次：低阈值模型预测（预测所有可能的类）
+        """
 
+        
+        pred1 = model(img, augment=opt['augment'])[0]
+        pred1 = non_max_suppression(pred1, 0.01, 0.2, classes=opt['classes'], agnostic=opt['agnostic_nms'])   
+        for i, det1 in enumerate(pred1):  # detections per image
+            s, im0 = '', im0s
+            
+
+            gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
+            if det1 is not None and len(det1):
+                # Rescale boxes from img_size to im0 size
+                det1[:, :4] = scale_coords(img.shape[2:], det1[:, :4], im0.shape).round()
+
+                # Print results
+                for c in det1[:, -1].unique():
+                    n = (det1[:, -1] == c).sum()  # detections per class
+                    s += '%g %ss, ' % (n, names[int(c)])  # add to string·
+
+                # Write results
+                boxes_detected1 = [] #检测结果
+                for *xyxy, conf, cls in reversed(det1):
+                    xyxy_list = (torch.tensor(xyxy).view(1, 4)).view(-1).tolist()  
+                    boxes_detected1.append({"name": id2name[int(cls.item())],
+                                    "conf": str(conf.item()),
+                                    "bbox": [int(xyxy_list[0]), int(xyxy_list[1]), int(xyxy_list[2]), int(xyxy_list[3])]
+                                    })
+        #boxes_detected是标准模型预测出来的，boxes_detected1是低阈值模型预测出来的。
+        
+        boxes1_belongs_to_boxes = []
+        
+        for index_in_boxes_detected, place in enumerate(boxes_detected) :
+            boxes1_belongs_to_boxes.append([])
+            for place1 in boxes_detected1 :
+                if abs(place['bbox'][0] - place1['bbox'][0]) < width_thres and abs(place['bbox'][1] - place1['bbox'][1]) < hight_thres \
+                    and abs(place['bbox'][2] - place1['bbox'][2]) < width_thres and abs(place['bbox'][3] - place1['bbox'][3]) < hight_thres: 
+                    boxes1_belongs_to_boxes[-1].append(place1)
+        
+
+                    
+                
     results = {"results": boxes_detected}
     print(results)
+    print(boxes1_belongs_to_boxes)#筛选出来的boundingbox结果
     return results
+
+    #目前思路4/24：先用标准模型跑一编框定大概的位置，再用低阈值模型跑一边确定在该位置附件的可能的class。如果标准模型跑完识别不出来就直接用低阈值模型的最大概率（暂时不考虑）。

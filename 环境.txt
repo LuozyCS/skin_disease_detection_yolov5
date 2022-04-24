@@ -1,1 +1,5 @@
 pytorch 1.9.1+cpu
+
+flask
+vue
+flask的mysql环境
