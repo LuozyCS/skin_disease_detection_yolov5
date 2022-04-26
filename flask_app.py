@@ -41,8 +41,12 @@ def get_prediction():
     img_arr = np.array(img)
     # print('img_arr shape = %s \n' % str(img_arr.shape))
 
-    results = predict(opt, model, img_arr) # 预测图像
-
+    results, class_results= predict(opt, model, img_arr) # 预测图像
+    """
+    如果无法识别出来就要返回没识别出来，不然会报错
+    若识别出来了就把results和class_results整合一下
+    """
+    
     return jsonify(results)
 
 @app.after_request

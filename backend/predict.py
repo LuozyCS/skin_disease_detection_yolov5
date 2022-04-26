@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import os
 import shutil
 import time
@@ -15,6 +16,9 @@ from utils.plots import Annotator, colors
 from backend.flask_id2name import id2name
 
 def predict(opt, model, img):
+    """
+    只要在5%的整图误差范围内就算同一位置
+    """
     hight_thres = img.shape[1] * 0.05
     width_thres = img.shape[0] * 0.05
     out, source, view_img, save_img, save_txt, imgsz = \
@@ -61,12 +65,12 @@ def predict(opt, model, img):
         # 前向推理
         pred = model(img, augment=opt['augment'])[0] 
         # Apply NMS（非极大抑制）
-        pred = non_max_suppression(pred, opt['conf_thres'], opt['iou_thres'], classes=opt['classes'], agnostic=opt['agnostic_nms'])
+        pred1 = non_max_suppression(pred, opt['conf_thres'], opt['iou_thres'], classes=opt['classes'], agnostic=opt['agnostic_nms'],multi_label=False)
         #pred = non_max_suppression(pred1, 0.01, 0.2, classes=opt['classes'], agnostic=opt['agnostic_nms']) 
         t2 = time_sync()
 
         # Process detections
-        for i, det in enumerate(pred):  # detections per image
+        for i, det in enumerate(pred1):  # detections per image
             p, s, im0 = path, '', im0s
             save_path = str(Path(out) / Path(p).name) # 保存路径
             txt_path = str(Path(out) / Path(p).stem) + ('_%g' % dataset.frame if dataset.mode == 'video' else '')
@@ -105,14 +109,21 @@ def predict(opt, model, img):
             if save_img:
                 if dataset.mode == 'images':
                     cv2.imwrite(save_path, im0)
+
+        """
+        如果无法识别出来就要返回没识别出来，不然会报错
+        """
+        if det is None or not len(det):
+            return None, None
+
         """
         第二次：低阈值模型预测（预测所有可能的类）
         """
 
         
-        pred1 = model(img, augment=opt['augment'])[0]
-        pred1 = non_max_suppression(pred1, 0.01, 0.2, classes=opt['classes'], agnostic=opt['agnostic_nms'])   
-        for i, det1 in enumerate(pred1):  # detections per image
+        
+        pred2 = non_max_suppression(pred, 0.01, 0.2, classes=opt['classes'], agnostic=opt['agnostic_nms'])   
+        for i, det1 in enumerate(pred2):  # detections per image
             s, im0 = '', im0s
             
 
@@ -151,6 +162,7 @@ def predict(opt, model, img):
     results = {"results": boxes_detected}
     print(results)
     print(boxes1_belongs_to_boxes)#筛选出来的boundingbox结果
-    return results
+    return results,boxes1_belongs_to_boxes
 
-    #目前思路4/24：先用标准模型跑一编框定大概的位置，再用低阈值模型跑一边确定在该位置附件的可能的class。如果标准模型跑完识别不出来就直接用低阈值模型的最大概率（暂时不考虑）。
+    #目前思路4/24：先用标准模型跑一编框定大概的位置，再用低阈值模型跑一边确定在该位置附件的可能的class，这些可能的类输出出来，存在boxes1_belongs_to_boxes中。(已完成)
+    # 如果标准模型跑完识别不出来就直接检测是否为空，为空直接说没检测出来（正在做）。
