@@ -40,7 +40,13 @@ function communicate(img_base64_url) {
     data: JSON.stringify({"image": img_base64_url}), //使用base64编码
     dataType: "json"
   }).done(function(response_data) {
-      drawResult(response_data.results);
+      console.log(response_data);
+      if(response_data == null){
+        alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
+      }
+      else{
+        drawResult(response_data.results);
+      }
   });
 }
 
@@ -72,7 +78,9 @@ function handleFiles() {
 
 // 上传图片按钮的回调函数
 function clickUploader() {
+  canvas.style.display = "none";
   fileInput.click();
+  
 }
 
 // 选择预测框绘制颜色
@@ -121,6 +129,7 @@ function drawResult(results) {
       let content = class_name + " " + parseFloat(score).toFixed(2);
       ctx.fillText(content, bbox[0], bbox[1] < 20 ? bbox[1] + 30 : bbox[1]-5);
   }
+  canvas.style.display = "";
 }
 
 
