@@ -1,3 +1,4 @@
+import enum
 from models.experimental import attempt_load
 from utils.torch_utils import select_device
 from PIL import Image
@@ -43,9 +44,16 @@ def get_prediction():
 
     results, class_results= predict(opt, model, img_arr) # 预测图像
     """
-    如果无法识别出来就要返回没识别出来，不然会报错
-    若识别出来了就把results和class_results整合一下
+    results检测出来了，就调用“调查问卷”函数，同时返回results在前端进行截图，后端只需要class_results和前端截图结果一一对应即可。
+    若results没有检测出来，就直接返回results，不调用“调查问卷”函数。
     """
+
+    #我不确定这么写可不可以保证为空能进入这个if
+    if results is None or len(results['results']) or results['results'] is None:
+        return  jsonify(results)
+    
+    #在这里调用调查问卷函数  参数：class_results
+    
     
     return jsonify(results)
 
