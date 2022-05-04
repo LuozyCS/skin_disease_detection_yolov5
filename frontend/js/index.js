@@ -40,11 +40,13 @@ function communicate(img_base64_url) {
     data: JSON.stringify({"image": img_base64_url}), //使用base64编码
     dataType: "json"
   }).done(function(response_data) {
-      console.log(response_data);
+      //console.log(response_data);
       if(response_data == null){
         alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
       }
       else{
+        //alert(response_data.class_results[1]['name'])
+        console.log(response_data.class_results)//可以把标准框附件的类输出出来
         drawResult(response_data.results);
       }
   });
@@ -129,7 +131,7 @@ function drawResult(results) {
       let content = class_name + " " + parseFloat(score).toFixed(2);
       ctx.fillText(content, bbox[0], bbox[1] < 20 ? bbox[1] + 30 : bbox[1]-5);
   }
-  canvas.style.display = "";
+  canvas.style.display = ""; //画完了才显示出图片
 }
 
 

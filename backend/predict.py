@@ -114,7 +114,7 @@ def predict(opt, model, img):
         如果无法识别出来就要返回没识别出来，不然会报错
         """
         if det is None or not len(det):
-            return None, None
+            return None
 
         """
         第二次：低阈值模型预测（预测所有可能的类）
@@ -159,10 +159,10 @@ def predict(opt, model, img):
 
                     
                 
-    results = {"results": boxes_detected}
+    results = {"results": boxes_detected,"class_results":boxes1_belongs_to_boxes}
     print(results)
     print(boxes1_belongs_to_boxes)#筛选出来的boundingbox结果
-    return results,boxes1_belongs_to_boxes
+    return results
 
     #目前思路4/24：先用标准模型跑一编框定大概的位置，再用低阈值模型跑一边确定在该位置附件的可能的class，这些可能的类输出出来，存在boxes1_belongs_to_boxes中。(已完成)
     # 如果标准模型跑完识别不出来就直接检测是否为空，为空直接说没检测出来。（正在做）
