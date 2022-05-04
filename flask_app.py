@@ -1,4 +1,6 @@
 import enum
+from tkinter.messagebox import QUESTION
+from turtle import distance
 from models.experimental import attempt_load
 from utils.torch_utils import select_device
 from PIL import Image
@@ -53,9 +55,24 @@ def get_prediction():
         return  jsonify(results)
     
     #在这里调用调查问卷函数  参数：class_results
-    for whichclass in results['class_results'] :
+    #每个问题给个编号，直接用编号做交互
+    #要维护一个这个病人的疾病表,一行就是一个矩形框
+    disease_table = []
+    question_table = []
+    switch = {'melanoma':0, 'nevus':1, 'acne':2, 'urticaria':3, 'tinea_corporis':4, 'corn':5, 'vitiligo':6}
+    for whichrectangle in results['class_results'] :
+        class_vector = [.0 for dghjfghf in range(7)]
+        question_vector = []
+        for whichclass in whichrectangle :
+            class_vector[switch[whichclass['name']]] = whichclass['conf']
+            # question_vector.append((1,'aaa'))#数据库操作
+        disease_table.append(class_vector)
+        question_table.append(question_vector)
+    del switch
 
+    #results['disease_table'] = disease_table
     #测试
+    #results只负责画框，剩下的结果都在class_results里
     return jsonify(results)
 
 @app.after_request
