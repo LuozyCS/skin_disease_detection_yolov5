@@ -12,6 +12,8 @@ import numpy as np
 from backend.predict import predict
 from pathlib import Path
 
+from common import mysql_operate  # 从common包中导入mysql_operate，使用其db
+
 # 传入__name__实例化Flask
 app = Flask(__name__)
 
@@ -54,18 +56,24 @@ def get_prediction():
     if results is None or len(results['results']) or results['results'] is None:
         return  jsonify(results)
     
-    #在这里调用调查问卷函数  参数：class_results
+    #在这里实现调查问卷
     #每个问题给个编号，直接用编号做交互
     #要维护一个这个病人的疾病表,一行就是一个矩形框
     disease_table = []
     question_table = []
     switch = {'melanoma':0, 'nevus':1, 'acne':2, 'urticaria':3, 'tinea_corporis':4, 'corn':5, 'vitiligo':6}
-    for whichrectangle in results['class_results'] :
-        class_vector = [.0 for dghjfghf in range(7)]
+    for whichrectangle in results['class_results'] : #classs_results中的一行为一个矩形框的病变内容
+        class_vector = [.0 for dghjfghf in range(7)] #class_vector存储一个矩形框的各种病的置信度
         question_vector = []
-        for whichclass in whichrectangle :
+        for whichclass in whichrectangle : 
+            #把各个类的置信度拿出来存进去
             class_vector[switch[whichclass['name']]] = whichclass['conf']
+            #把各个类对应的问题拿出来存进去
+            sql = "SELECT id, questionContent FROM Question WHERE disease = '" + switch[whichclass['name']] + "'"
+            question_vector.append(mysql_operate.db.select_db(sql))
             # question_vector.append((1,'aaa'))#数据库操作
+
+        #各vector按顺序对应各矩形框，直接append进去即可   
         disease_table.append(class_vector)
         question_table.append(question_vector)
     del switch
