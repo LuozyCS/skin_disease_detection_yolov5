@@ -161,7 +161,7 @@ def predict(opt, model, img):
                 
     results = {"results": boxes_detected,"class_results":boxes1_belongs_to_boxes}
     print(results)
-    print(boxes1_belongs_to_boxes)#筛选出来的boundingbox结果
+    #print(boxes1_belongs_to_boxes)#筛选出来的boundingbox结果
     return results
 
     #目前思路4/24：先用标准模型跑一编框定大概的位置，再用低阈值模型跑一边确定在该位置附件的可能的class，这些可能的类输出出来，存在boxes1_belongs_to_boxes中。(已完成)

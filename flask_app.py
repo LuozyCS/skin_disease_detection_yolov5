@@ -53,7 +53,8 @@ def get_prediction():
     """
 
     #我不确定这么写可不可以保证为空能进入这个if   5月4更新，好像只需要第一个
-    if results is None or len(results['results']) or results['results'] is None:
+    if results is None is None:
+        print("None return---------") 
         return  jsonify(results)
     
     #在这里实现调查问卷
@@ -61,7 +62,7 @@ def get_prediction():
     #要维护一个这个病人的疾病表,一行就是一个矩形框
     disease_table = []
     question_table = []
-    switch = {'melanoma':0, 'nevus':1, 'acne':2, 'urticaria':3, 'tinea_corporis':4, 'corn':5, 'vitiligo':6}
+    switch = {'melanoma':1, 'nevus':2, 'acne':3, 'urticaria':4, 'tinea_corporis':5, 'corn':6, 'vitiligo':7}
     for whichrectangle in results['class_results'] : #classs_results中的一行为一个矩形框的病变内容
         class_vector = [.0 for dghjfghf in range(7)] #class_vector存储一个矩形框的各种病的置信度
         question_vector = []
@@ -69,7 +70,9 @@ def get_prediction():
             #把各个类的置信度拿出来存进去
             class_vector[switch[whichclass['name']]] = whichclass['conf']
             #把各个类对应的问题拿出来存进去
-            sql = "SELECT id, questionContent FROM Question WHERE disease = '" + switch[whichclass['name']] + "'"
+            sql = "SELECT id, questionContent FROM Question WHERE disease = '" + str(switch[whichclass['name']]) + "'"
+            print("SQL-----------")
+            print(mysql_operate.db.select_db(sql))
             question_vector.append(mysql_operate.db.select_db(sql))
             # question_vector.append((1,'aaa'))#数据库操作
 
@@ -78,6 +81,9 @@ def get_prediction():
         question_table.append(question_vector)
     del switch
 
+    #字典类型添加元素的方法如下
+    results['disease_table'] = disease_table
+    results['question_table'] = question_table
     #results['disease_table'] = disease_table
     #测试
     #results只负责画框，剩下的结果都在class_results里

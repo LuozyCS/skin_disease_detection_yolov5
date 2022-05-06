@@ -47,6 +47,8 @@ function communicate(img_base64_url) {
       else{
         //alert(response_data.class_results[1]['name'])
         console.log(response_data.class_results)//可以把标准框附件的类输出出来
+        console.log(response_data.disease_table)
+        console.log(response_data.question_table)
         drawResult(response_data.results);
       }
   });
