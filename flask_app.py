@@ -53,7 +53,7 @@ def get_prediction():
     """
 
     #我不确定这么写可不可以保证为空能进入这个if   5月4更新，好像只需要第一个
-    if results is None is None:
+    if results is None:
         print("None return---------") 
         return  jsonify(results)
     
@@ -62,7 +62,7 @@ def get_prediction():
     #要维护一个这个病人的疾病表,一行就是一个矩形框
     disease_table = []
     question_table = []
-    switch = {'melanoma':1, 'nevus':2, 'acne':3, 'urticaria':4, 'tinea_corporis':5, 'corn':6, 'vitiligo':7}
+    switch = {'melanoma':0, 'nevus':1, 'acne':2, 'urticaria':3, 'tinea_corporis':4, 'corn':5, 'vitiligo':6}
     for whichrectangle in results['class_results'] : #classs_results中的一行为一个矩形框的病变内容
         class_vector = [.0 for dghjfghf in range(7)] #class_vector存储一个矩形框的各种病的置信度
         question_vector = []
@@ -70,7 +70,7 @@ def get_prediction():
             #把各个类的置信度拿出来存进去
             class_vector[switch[whichclass['name']]] = whichclass['conf']
             #把各个类对应的问题拿出来存进去
-            sql = "SELECT id, questionContent FROM Question WHERE disease = '" + str(switch[whichclass['name']]) + "'"
+            sql = "SELECT id, questionContent FROM Question WHERE disease = '" + str(switch[whichclass['name']] + 1) + "'"
             print("SQL-----------")
             print(mysql_operate.db.select_db(sql))
             question_vector.append(mysql_operate.db.select_db(sql))

@@ -133,7 +133,7 @@ function drawResult(results) {
       let content = class_name + " " + parseFloat(score).toFixed(2);
       ctx.fillText(content, bbox[0], bbox[1] < 20 ? bbox[1] + 30 : bbox[1]-5);
   }
-  canvas.style.display = ""; //画完了才显示出图片
+  canvas.style.display = ""; //画完了才显示出图片，新加的，后面还要隐藏问卷等
 }
 
 
