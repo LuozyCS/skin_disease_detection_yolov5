@@ -3,7 +3,7 @@ const image = document.getElementById('image');
 const canvas = document.getElementById('canvas');
 const warning = document.getElementById('warning');
 const fileInput = document.getElementById('fileUploader');
-
+const myout = document.getElementById('myout');
 // const URL = "http://localhost:5000/predict/"
 // const URL = "http://192.168.16.121:5000/predict/"
 
@@ -50,9 +50,11 @@ function communicate(img_base64_url) {
         console.log(response_data.disease_table)
         console.log(response_data.question_table)
         drawResult(response_data.results);
+        output(response_data.question_table);
       }
   });
 }
+
 
 // 处理用户上传图片，发送至服务器并绘制检测结果 
 function parseFiles(files) {
@@ -136,6 +138,34 @@ function drawResult(results) {
   canvas.style.display = ""; //画完了才显示出图片，新加的，后面还要隐藏问卷等
 }
 
+//把各框截图和问卷循环写到主页
+function output(question_table){
+  // console.log(question_table)
+  // for(var i = 0; i < question_table.length; i++){
+  //   //console.log(rect)
+  //   var html='';
+  //   for(var j = 0; j < question_table[i].length; j++){
+  //     //console.log(eachclass)
+  //     for(var k = 0; k < question_table[i][j].length; k++){
+  //       //console.log(eachque['questionContent']) 
+  //       html+='<p>'+question_table[i][j][k]['questionContent']+'</p>';
+  //       myout.innerHTML = html;
+  //     }
+  //   }
+  // }
+  //不能用for in 一定要用for of
+  //不能用class作为变量名
+  for(var rect of question_table){
+    var html='';
+    for(var queclass of rect){
+      for(var que of queclass){
+        html+='<p>'+que['questionContent']+'</p>';
+        myout.innerHTML = html;
+      }
+    }
+  }
+  
+}
 
 // 初始化函数
 async function setup() {

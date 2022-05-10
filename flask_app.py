@@ -84,6 +84,7 @@ def get_prediction():
     #字典类型添加元素的方法如下
     results['disease_table'] = disease_table
     results['question_table'] = question_table
+    
     #results['disease_table'] = disease_table
     #测试
     #results只负责画框，剩下的结果都在class_results里
