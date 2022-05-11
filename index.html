@@ -11,7 +11,15 @@
   <h1 class='title'>皮肤病检测项目中期演示</h1>
 
   <div id="container">
-    <img src="frontend/demo_images/demo.jpg" id="image" class="center">
+    <img src="" id="image" class="center">
+    <div id="camera">
+      <button onclick="openMedia()">开启摄像头</button>
+      <video id="video" width="500px" height="500px" autoplay="autoplay" style.display=none></video>
+      <!-- <canvas id="canvas1" width="500px" height="500px"></canvas> -->
+      <button onclick="takePhoto()">拍照</button>
+      <!-- <img id="imgTag" src="" alt="imgTag"> -->
+      <button onclick="closeMedia()">关闭摄像头</button>
+    </div>
     <div id="text-container">
       <p id="instruction" class="red-color">
       <button id="uploader-btn" onClick="clickUploader()">上传文件</button>
@@ -21,9 +29,13 @@
       </p>
       <input name="imgFile" type="file" id="fileUploader" accept="image/*" onChange="handleFiles()">
     </div>
+
+    
+
     <canvas id="canvas"></canvas>
     <div id="myout"></div>
   </div>
   <script src="frontend/js/index.js"></script>
+
 </body>
 </html>

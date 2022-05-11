@@ -11,14 +11,14 @@ const image1 = new Image();
 
 // 获取服务器端URL 
 function GetUrl()
-　　{
+{
 	var protocol = window.location.protocol.toString();
 	// var host =  window.location.host.toString();
 	var host =  document.domain.toString();
         var port = window.location.port.toString();
 	var url = protocol + '//' + host + ":5000/predict/";
 	return url;
-　　}
+}
 
 
 const URL = GetUrl()
@@ -56,6 +56,51 @@ function communicate(img_base64_url) {
   });
 }
 
+function takePhoto() {
+  //获得Canvas对象
+  let video = document.getElementById('video');
+  let canvas = document.getElementById('canvas1');
+  let ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, 500, 500);
+
+
+  // toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
+  let img = document.getElementById('canvas1').toDataURL();
+  // 这里的img就是得到的图片
+  console.log('img-----', img);
+  document.getElementById('imgTag').src=img;//上传
+  communicate(img);
+}
+
+
+
+let mediaStreamTrack=null; // 视频对象(全局)
+let video ;
+function openMedia() {
+  let constraints = {
+      video: { width: 500, height: 500 },
+      audio: false
+  };
+  //获得video摄像头
+  video = document.getElementById('video');     
+  let promise = navigator.mediaDevices.getUserMedia(constraints);
+  promise.then((mediaStream) => {
+    // mediaStreamTrack = typeof mediaStream.stop === 'function' ? mediaStream : mediaStream.getTracks()[1];
+    mediaStreamTrack=mediaStream.getVideoTracks()
+      video.srcObject = mediaStream;
+      video.play();
+  });
+}
+
+// 关闭摄像头
+function closeMedia() {
+  let stream = document.getElementById('video').srcObject;
+  let tracks = stream.getTracks();
+  tracks.forEach(function(track) {
+    track.stop();
+  });
+document.getElementById('video').srcObject = null;
+}
 
 // 处理用户上传图片，发送至服务器并绘制检测结果 
 function parseFiles(files) {
@@ -174,11 +219,18 @@ function output(question_table, results){
     //把这个框的问题输出
     for(var queclass of rect){
       for(var que of queclass){
-        html+='<p>'+que['questionContent']+'</p>';
+        //html+='<p>'+que['questionContent']+'</p>';
+        html+='<div class="divCss">' + "Q" + que['id']+":"+que['questionContent'] +
+          '<ol type="A" start="" class="olCss" >' +
+            '<input class="inputClass" type="radio" name="place" value="" checked="checked" /><li class="liRight">是</li>'+
+            '<input class="inputClass" type="radio" name="place" value="" /><li class="liRight">否</li>'+
+          '</ol>'+
+        '</div>'
       }
     }
     index+=1;
   }
+  
   myout.innerHTML = html;
 }
 
