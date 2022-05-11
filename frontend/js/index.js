@@ -4,6 +4,7 @@ const canvas = document.getElementById('canvas');
 const warning = document.getElementById('warning');
 const fileInput = document.getElementById('fileUploader');
 const myout = document.getElementById('myout');
+const image1 = new Image();
 // const URL = "http://localhost:5000/predict/"
 // const URL = "http://192.168.16.121:5000/predict/"
 
@@ -50,7 +51,7 @@ function communicate(img_base64_url) {
         console.log(response_data.disease_table)
         console.log(response_data.question_table)
         drawResult(response_data.results);
-        output(response_data.question_table);
+        output(response_data.question_table, response_data.results);
       }
   });
 }
@@ -139,7 +140,7 @@ function drawResult(results) {
 }
 
 //把各框截图和问卷循环写到主页
-function output(question_table){
+function output(question_table, results){
   // console.log(question_table)
   // for(var i = 0; i < question_table.length; i++){
   //   //console.log(rect)
@@ -155,17 +156,62 @@ function output(question_table){
   // }
   //不能用for in 一定要用for of
   //不能用class作为变量名
+  var index = 0;
+  var html = '';
   for(var rect of question_table){
-    var html='';
+    //var html = '';
+
+    //把这个框的截图输出
+    bbox = results[index]['bbox'];
+    width = bbox[2] - bbox[0];
+    height = bbox[3] - bbox[1];
+    var newImg = new Image();
+    cutImg(index,bbox[0],bbox[1],width,height,image.height,image.width); 
+
+    //myout.innerHTML = '<canvas id=\"test' + index + '\"></canvas>'
+    html += "<img src=\""+ image1.src +"\" />"
+    
+    //把这个框的问题输出
     for(var queclass of rect){
       for(var que of queclass){
         html+='<p>'+que['questionContent']+'</p>';
-        myout.innerHTML = html;
       }
     }
+    index+=1;
   }
-  
+  myout.innerHTML = html;
 }
+
+function cutImg(index,left,top,width,height,container_height,container_width){
+
+  const canvas_bak = document.createElement('CANVAS');
+  const ctx_bak = canvas_bak.getContext('2d');
+  canvas_bak.width = container_width;
+  canvas_bak.height = container_height;
+  ctx_bak.drawImage(image, 0, 0, container_width, container_height);
+
+  const canvas = document.createElement('CANVAS');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, width, height);
+  ctx.drawImage(canvas_bak,left,top,width,height,
+  0,0,width,height
+  );
+
+  //const value = Number(document.getElementById('sel').value);
+  const code = canvas.toDataURL();
+  //const image1 = new Image();
+  image1.src = code;
+  //return image1;
+  // image1.onload = () => {
+  //   const des = document.getElementById('myout');
+  //   //des.innerHTML += '';
+  //   des.appendChild(image1);
+  //   //compress_img = image1;
+  // };
+ }
 
 // 初始化函数
 async function setup() {
