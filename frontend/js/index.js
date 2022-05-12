@@ -56,26 +56,29 @@ function communicate(img_base64_url) {
   });
 }
 
+let mediaStreamTrack=null; // 视频对象(全局)
+let video ;
+
 function takePhoto() {
   //获得Canvas对象
   let video = document.getElementById('video');
   let canvas = document.getElementById('canvas1');
   let ctx = canvas.getContext('2d');
   ctx.drawImage(video, 0, 0, 500, 500);
-
+  closeMedia();
 
   // toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
   let img = document.getElementById('canvas1').toDataURL();
   // 这里的img就是得到的图片
   console.log('img-----', img);
-  document.getElementById('imgTag').src=img;//上传
+  document.getElementById('image').src=img;//上传
   communicate(img);
+  
 }
 
 
 
-let mediaStreamTrack=null; // 视频对象(全局)
-let video ;
+
 function openMedia() {
   let constraints = {
       video: { width: 500, height: 500 },
@@ -89,6 +92,11 @@ function openMedia() {
     mediaStreamTrack=mediaStream.getVideoTracks()
       video.srcObject = mediaStream;
       video.play();
+      document.getElementById('video').style.display="";
+
+      canvas.style.display = "none";
+      myout.style.display = "none";
+      document.getElementById('image').style.display="none";
   });
 }
 
@@ -100,6 +108,12 @@ function closeMedia() {
     track.stop();
   });
 document.getElementById('video').srcObject = null;
+document.getElementById('video').style.display="none";
+  canvas.style.display = "none";
+  myout.style.display = "none";
+  document.getElementById('image').style.display="";
+//document.getElementById('video').style.display="none";
+
 }
 
 // 处理用户上传图片，发送至服务器并绘制检测结果 
@@ -131,6 +145,10 @@ function handleFiles() {
 // 上传图片按钮的回调函数
 function clickUploader() {
   canvas.style.display = "none";
+  myout.style.display = "none";
+  document.getElementById('video').style.display="none";
+  document.getElementById('image').style.display="";
+  
   fileInput.click();
   
 }
@@ -181,24 +199,17 @@ function drawResult(results) {
       let content = class_name + " " + parseFloat(score).toFixed(2);
       ctx.fillText(content, bbox[0], bbox[1] < 20 ? bbox[1] + 30 : bbox[1]-5);
   }
-  canvas.style.display = ""; //画完了才显示出图片，新加的，后面还要隐藏问卷等
+  //画完了才显示出图片，新加的，后面还要隐藏问卷等
+
+  document.getElementById('video').style.display="none";
+  canvas.style.display = "";
+  myout.style.display = "";
+  document.getElementById('image').style.display="";
 }
 
 //把各框截图和问卷循环写到主页
 function output(question_table, results){
-  // console.log(question_table)
-  // for(var i = 0; i < question_table.length; i++){
-  //   //console.log(rect)
-  //   var html='';
-  //   for(var j = 0; j < question_table[i].length; j++){
-  //     //console.log(eachclass)
-  //     for(var k = 0; k < question_table[i][j].length; k++){
-  //       //console.log(eachque['questionContent']) 
-  //       html+='<p>'+question_table[i][j][k]['questionContent']+'</p>';
-  //       myout.innerHTML = html;
-  //     }
-  //   }
-  // }
+
   //不能用for in 一定要用for of
   //不能用class作为变量名
   var index = 0;
