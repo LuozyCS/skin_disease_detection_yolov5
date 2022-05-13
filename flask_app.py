@@ -110,7 +110,9 @@ def get_ans():
                 sql = "SELECT disease, weightsDown as w FROM Question WHERE id = " + ans[ans.find('Q')+1 : ans.find('N')]
             tmp = mysql_operate.db.select_db(sql)[0]
             data_dis[int(ans[0])][tmp['disease']-1] *= (tmp['w'] * 0.01)#第几个框
-            # a = 1 if b == 2 else 3
+
+    #截断最大值为1        
+    data_dis = list(map( lambda x:list(map(lambda y:min(y,1.0), x)), data_dis))
 
     print(data_dis)
     return jsonify("hahaha")
