@@ -160,7 +160,7 @@ def predict(opt, model, img):
                     
                 
     results = {"results": boxes_detected,"class_results":boxes1_belongs_to_boxes}
-    print(results)
+    #print(results)
     #print(boxes1_belongs_to_boxes)#筛选出来的boundingbox结果
     return results
 

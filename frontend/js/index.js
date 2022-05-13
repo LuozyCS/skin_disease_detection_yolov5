@@ -20,7 +20,6 @@ function GetUrl() {
   return url;
 }
 
-
 const URL = GetUrl()
 // alert(URL);
 
@@ -29,7 +28,6 @@ function preventDefaults(e) {
   e.preventDefault() //取消事件的默认动作
   e.stopPropagation() //停止事件的传播，阻止它被分派到其他Document节点。
 };
-
 
 // 发送图片到服务器, 接收检测结果,就是后端传过来的box，并在canvas上绘图 
 function communicate(img_base64_url) {
@@ -68,17 +66,37 @@ function sendMsg() {
 
 
   $("[name='single']").each(function (index) {
-          var answer = "zxc"
-          $(this).find("input").each(function(s){
-            var aname = $(this).attr("name")
-            console.log(aname);
-            answerArr[index] = $("input[name='"+aname+"']:checked").val();
-          })
+    var answer = "zxc"
+    $(this).find("input").each(function (s) {
+      var aname = $(this).attr("name")
+      console.log(aname);
+      answerArr[index] = $("input[name='" + aname + "']:checked").val();
+    })
   })
   //queIndex += 1;
-//在调试模式下的console中查看输出
-console.log(answerArr);
+  //在调试模式下的console中查看输出
+  console.log(answerArr);
   //发送答案到服务器
+  var protocol = window.location.protocol.toString();
+  var host = document.domain.toString();
+  var quesURL = protocol + '//' + host + ":5000/quesback/";
+   
+  $.ajax({
+    url: quesURL,
+    type: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ "ans": answerArr , "disease": dt_global}), //使用base64编码
+    dataType: "json"
+  }).done(function (response_data) {
+    //console.log(response_data);
+    if (response_data == null) {
+      alert("问卷内容出错，请重新填写")
+    }
+    else {
+      
+    }
+  });
+
 }
 
 let mediaStreamTrack = null; // 视频对象(全局)

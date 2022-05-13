@@ -54,7 +54,7 @@ def get_prediction():
 
     #我不确定这么写可不可以保证为空能进入这个if   5月4更新，好像只需要第一个
     if results is None:
-        print("None return---------") 
+        #print("None return---------") 
         return  jsonify(results)
     
     #在这里实现调查问卷
@@ -71,8 +71,8 @@ def get_prediction():
             class_vector[switch[whichclass['name']]] = whichclass['conf']
             #把各个类对应的问题拿出来存进去
             sql = "SELECT id, questionContent FROM Question WHERE disease = '" + str(switch[whichclass['name']] + 1) + "'"
-            print("SQL-----------")
-            print(mysql_operate.db.select_db(sql))
+            #print("SQL-----------")
+            #print(mysql_operate.db.select_db(sql))
             question_vector.append(mysql_operate.db.select_db(sql))
             # question_vector.append((1,'aaa'))#数据库操作
 
@@ -89,6 +89,17 @@ def get_prediction():
     #测试
     #results只负责画框，剩下的结果都在class_results里
     return jsonify(results)
+
+
+@app.route('/quesback/', methods=['POST'])
+def get_ans():
+    response = request.get_json()
+    data_ans = response['ans']
+    data_dis = []
+    data_dis = response['disease']
+    print(data_ans)
+    print(data_dis)
+    return jsonify("hahaha")
 
 @app.after_request
 def add_headers(response):
