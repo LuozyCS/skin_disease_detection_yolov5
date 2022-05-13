@@ -5,6 +5,7 @@ const warning = document.getElementById('warning');
 const fileInput = document.getElementById('fileUploader');
 const myout = document.getElementById('myout');
 const image1 = new Image();
+
 // const URL = "http://localhost:5000/predict/"
 // const URL = "http://192.168.16.121:5000/predict/"
 
@@ -51,24 +52,32 @@ function communicate(img_base64_url) {
       console.log(response_data.question_table)
       drawResult(response_data.results);
       output(response_data.question_table, response_data.results);
+      qt_global = response_data.question_table;
+      dt_global = response_data.disease_table;
     }
   });
 }
-
+var qt_global;
+var dt_global;
 function sendMsg() {
   //题目数
   var singleSize = $("[name='single']").length;
   //答案数组
   var answerArr = new Array(singleSize);
   //单选答案
-  $("[name='single']").each(function (index) {
-    //放入答案
-    var answer = $("input[name='place" + (index + 1) + "']:checked").val();
-    answerArr[index] = answer;
-  })
 
-  //在调试模式下的console中查看输出
-  console.log(answerArr);
+
+  $("[name='single']").each(function (index) {
+          var answer = "zxc"
+          $(this).find("input").each(function(s){
+            var aname = $(this).attr("name")
+            console.log(aname);
+            answerArr[index] = $("input[name='"+aname+"']:checked").val();
+          })
+  })
+  //queIndex += 1;
+//在调试模式下的console中查看输出
+console.log(answerArr);
   //发送答案到服务器
 }
 
@@ -246,8 +255,9 @@ function output(question_table, results) {
         //html+='<p>'+que['questionContent']+'</p>';
         html += '<div class="divCss">' + "Q" + que['id'] + ":" + que['questionContent'] +
           '<ol type="A" start="" class="olCss" name="single">' +
-          '<label><input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=""/>是</label>' +
-          '<label><input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=""/>否</label>' +
+          '<input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "Y" + '\">是</input>' +
+          '<input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "N" + '\">否</input>' +
+          '<input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "P" + '\" checked="checked">不知道</input>' +
           '</ol>' +
           '</div>';
       }
