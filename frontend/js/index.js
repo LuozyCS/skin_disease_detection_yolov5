@@ -1,5 +1,5 @@
 
-const image = document.getElementById('image'); 
+const image = document.getElementById('image');
 const canvas = document.getElementById('canvas');
 const warning = document.getElementById('warning');
 const fileInput = document.getElementById('fileUploader');
@@ -10,14 +10,13 @@ const image1 = new Image();
 
 
 // 获取服务器端URL 
-function GetUrl()
-{
-	var protocol = window.location.protocol.toString();
-	// var host =  window.location.host.toString();
-	var host =  document.domain.toString();
-        var port = window.location.port.toString();
-	var url = protocol + '//' + host + ":5000/predict/";
-	return url;
+function GetUrl() {
+  var protocol = window.location.protocol.toString();
+  // var host =  window.location.host.toString();
+  var host = document.domain.toString();
+  var port = window.location.port.toString();
+  var url = protocol + '//' + host + ":5000/predict/";
+  return url;
 }
 
 
@@ -33,31 +32,48 @@ function preventDefaults(e) {
 
 // 发送图片到服务器, 接收检测结果,就是后端传过来的box，并在canvas上绘图 
 function communicate(img_base64_url) {
-//使用AJAX
+  //使用AJAX
   $.ajax({
     url: URL,
     type: "POST",
     contentType: "application/json",
-    data: JSON.stringify({"image": img_base64_url}), //使用base64编码
+    data: JSON.stringify({ "image": img_base64_url }), //使用base64编码
     dataType: "json"
-  }).done(function(response_data) {
-      //console.log(response_data);
-      if(response_data == null){
-        alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
-      }
-      else{
-        //alert(response_data.class_results[1]['name'])
-        console.log(response_data.class_results)//可以把标准框附件的类输出出来
-        console.log(response_data.disease_table)
-        console.log(response_data.question_table)
-        drawResult(response_data.results);
-        output(response_data.question_table, response_data.results);
-      }
+  }).done(function (response_data) {
+    //console.log(response_data);
+    if (response_data == null) {
+      alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
+    }
+    else {
+      //alert(response_data.class_results[1]['name'])
+      console.log(response_data.class_results)//可以把标准框附件的类输出出来
+      console.log(response_data.disease_table)
+      console.log(response_data.question_table)
+      drawResult(response_data.results);
+      output(response_data.question_table, response_data.results);
+    }
   });
 }
 
-let mediaStreamTrack=null; // 视频对象(全局)
-let video ;
+function sendMsg() {
+  //题目数
+  var singleSize = $("[name='single']").length;
+  //答案数组
+  var answerArr = new Array(singleSize);
+  //单选答案
+  $("[name='single']").each(function (index) {
+    //放入答案
+    var answer = $("input[name='place" + (index + 1) + "']:checked").val();
+    answerArr[index] = answer;
+  })
+
+  //在调试模式下的console中查看输出
+  console.log(answerArr);
+  //发送答案到服务器
+}
+
+let mediaStreamTrack = null; // 视频对象(全局)
+let video;
 
 function takePhoto() {
   //获得Canvas对象
@@ -71,32 +87,29 @@ function takePhoto() {
   let img = document.getElementById('canvas1').toDataURL();
   // 这里的img就是得到的图片
   console.log('img-----', img);
-  document.getElementById('image').src=img;//上传
+  document.getElementById('image').src = img;//上传
   communicate(img);
-  
+
 }
-
-
-
 
 function openMedia() {
   let constraints = {
-      video: { width: 500, height: 500 },
-      audio: false
+    video: { width: 500, height: 500 },
+    audio: false
   };
   //获得video摄像头
-  video = document.getElementById('video');     
+  video = document.getElementById('video');
   let promise = navigator.mediaDevices.getUserMedia(constraints);
   promise.then((mediaStream) => {
     // mediaStreamTrack = typeof mediaStream.stop === 'function' ? mediaStream : mediaStream.getTracks()[1];
-    mediaStreamTrack=mediaStream.getVideoTracks()
-      video.srcObject = mediaStream;
-      video.play();
-      document.getElementById('video').style.display="";
+    mediaStreamTrack = mediaStream.getVideoTracks()
+    video.srcObject = mediaStream;
+    video.play();
+    document.getElementById('video').style.display = "";
 
-      canvas.style.display = "none";
-      myout.style.display = "none";
-      document.getElementById('image').style.display="none";
+    canvas.style.display = "none";
+    myout.style.display = "none";
+    document.getElementById('image').style.display = "none";
   });
 }
 
@@ -104,15 +117,15 @@ function openMedia() {
 function closeMedia() {
   let stream = document.getElementById('video').srcObject;
   let tracks = stream.getTracks();
-  tracks.forEach(function(track) {
+  tracks.forEach(function (track) {
     track.stop();
   });
-document.getElementById('video').srcObject = null;
-document.getElementById('video').style.display="none";
+  document.getElementById('video').srcObject = null;
+  document.getElementById('video').style.display = "none";
   canvas.style.display = "none";
   myout.style.display = "none";
-  document.getElementById('image').style.display="";
-//document.getElementById('video').style.display="none";
+  document.getElementById('image').style.display = "";
+  //document.getElementById('video').style.display="none";
 
 }
 
@@ -146,11 +159,11 @@ function handleFiles() {
 function clickUploader() {
   canvas.style.display = "none";
   myout.style.display = "none";
-  document.getElementById('video').style.display="none";
-  document.getElementById('image').style.display="";
-  
+  document.getElementById('video').style.display = "none";
+  document.getElementById('image').style.display = "";
+
   fileInput.click();
-  
+
 }
 
 // 选择预测框绘制颜色
@@ -165,87 +178,90 @@ function selectColor(index) {
 
 // 在图片上绘制检测结果
 function drawResult(results) {
-    canvas.width = image.width;
-    canvas.height = image.height;
-    ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(image, 0, 0);
-    var index = 0;
-    var totalClasses=new Array(); 
-    for(bboxInfo of results) { 
-      bbox = bboxInfo['bbox'];
-      class_name = bboxInfo['name'];
-      score = bboxInfo['conf'];
+  canvas.width = image.width;
+  canvas.height = image.height;
+  ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(image, 0, 0);
+  var index = 0;
+  var totalClasses = new Array();
+  for (bboxInfo of results) {
+    bbox = bboxInfo['bbox'];
+    class_name = bboxInfo['name'];
+    score = bboxInfo['conf'];
 
-      ctx.beginPath();
-      ctx.lineWidth="4";
+    ctx.beginPath();
+    ctx.lineWidth = "4";
 
-      if (totalClasses.includes(class_name) == false) 
-        {
-           totalClasses[index] = class_name;
-           index += 1;
-        }
-      //ctx.strokeStyle="red";
-      //ctx.fillStyle="red";
-      var i = totalClasses.indexOf(class_name)   // class_name 值的索引值
-      ctx.strokeStyle = selectColor(i);
-      ctx.fillStyle = selectColor(i);
-      
-      ctx.rect(bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]);
-      ctx.stroke();
-      
-      ctx.font="20px Arial";
-      
-      let content = class_name + " " + parseFloat(score).toFixed(2);
-      ctx.fillText(content, bbox[0], bbox[1] < 20 ? bbox[1] + 30 : bbox[1]-5);
+    if (totalClasses.includes(class_name) == false) {
+      totalClasses[index] = class_name;
+      index += 1;
+    }
+    //ctx.strokeStyle="red";
+    //ctx.fillStyle="red";
+    var i = totalClasses.indexOf(class_name)   // class_name 值的索引值
+    ctx.strokeStyle = selectColor(i);
+    ctx.fillStyle = selectColor(i);
+
+    ctx.rect(bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]);
+    ctx.stroke();
+
+    ctx.font = "20px Arial";
+
+    let content = class_name + " " + parseFloat(score).toFixed(2);
+    ctx.fillText(content, bbox[0], bbox[1] < 20 ? bbox[1] + 30 : bbox[1] - 5);
   }
   //画完了才显示出图片，新加的，后面还要隐藏问卷等
 
-  document.getElementById('video').style.display="none";
+  document.getElementById('video').style.display = "none";
   canvas.style.display = "";
   myout.style.display = "";
-  document.getElementById('image').style.display="";
+  document.getElementById('image').style.display = "";
 }
 
 //把各框截图和问卷循环写到主页
-function output(question_table, results){
+function output(question_table, results) {
 
   //不能用for in 一定要用for of
   //不能用class作为变量名
-  var index = 0;
+  var rectIndex = 0;
   var html = '';
-  for(var rect of question_table){
+  html += '<form>';
+  for (var rect of question_table) {
     //var html = '';
 
     //把这个框的截图输出
-    bbox = results[index]['bbox'];
+    bbox = results[rectIndex]['bbox'];
     width = bbox[2] - bbox[0];
     height = bbox[3] - bbox[1];
     var newImg = new Image();
-    cutImg(index,bbox[0],bbox[1],width,height,image.height,image.width); 
+    cutImg(bbox[0], bbox[1], width, height, image.height, image.width);
 
     //myout.innerHTML = '<canvas id=\"test' + index + '\"></canvas>'
-    html += "<img src=\""+ image1.src +"\" />"
-    
+    html += "<img src=\"" + image1.src + "\" />"
+
     //把这个框的问题输出
-    for(var queclass of rect){
-      for(var que of queclass){
+    for (var queclass of rect) {
+      for (var que of queclass) {
         //html+='<p>'+que['questionContent']+'</p>';
-        html+='<div class="divCss">' + "Q" + que['id']+":"+que['questionContent'] +
-          '<ol type="A" start="" class="olCss" >' +
-            '<input class="inputClass" type="radio" name="place" value="" checked="checked" /><li class="liRight">是</li>'+
-            '<input class="inputClass" type="radio" name="place" value="" /><li class="liRight">否</li>'+
-          '</ol>'+
-        '</div>'
+        html += '<div class="divCss">' + "Q" + que['id'] + ":" + que['questionContent'] +
+          '<ol type="A" start="" class="olCss" name="single">' +
+          '<label><input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=""/>是</label>' +
+          '<label><input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=""/>否</label>' +
+          '</ol>' +
+          '</div>';
       }
     }
-    index+=1;
+    rectIndex += 1;
   }
-  
+  html += '</form>';
+
+  html += '<button onclick="sendMsg()">提交问卷</button>'
+
   myout.innerHTML = html;
 }
 
-function cutImg(index,left,top,width,height,container_height,container_width){
+function cutImg(left, top, width, height, container_height, container_width) {
 
   const canvas_bak = document.createElement('CANVAS');
   const ctx_bak = canvas_bak.getContext('2d');
@@ -259,8 +275,8 @@ function cutImg(index,left,top,width,height,container_height,container_width){
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, width, height);
-  ctx.drawImage(canvas_bak,left,top,width,height,
-  0,0,width,height
+  ctx.drawImage(canvas_bak, left, top, width, height,
+    0, 0, width, height
   );
 
   //const value = Number(document.getElementById('sel').value);
@@ -274,7 +290,7 @@ function cutImg(index,left,top,width,height,container_height,container_width){
   //   des.appendChild(image1);
   //   //compress_img = image1;
   // };
- }
+}
 
 // 初始化函数
 async function setup() {
