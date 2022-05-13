@@ -1,4 +1,5 @@
 import enum
+from os import TMP_MAX
 from tkinter.messagebox import QUESTION
 from turtle import distance
 from models.experimental import attempt_load
@@ -95,9 +96,22 @@ def get_prediction():
 def get_ans():
     response = request.get_json()
     data_ans = response['ans']
-    data_dis = []
-    data_dis = response['disease']
-    print(data_ans)
+    data_dis = list(map( lambda x:list(map(lambda y:float(y), x)), response['disease'] ))
+    #print(data_ans)
+    #print(data_dis)
+    print("---------------------------")
+    print(data_dis)
+    for ans in data_ans:
+        # if ans.find('P') == -1:#P不做改变
+        if not ans.__contains__('P'):
+            if ans.__contains__('Y'):
+                sql = "SELECT disease, weightsUp as w FROM Question WHERE id = " + ans[ans.find('Q')+1 : ans.find('Y')] 
+            elif ans.__contains__('N'): 
+                sql = "SELECT disease, weightsDown as w FROM Question WHERE id = " + ans[ans.find('Q')+1 : ans.find('N')]
+            tmp = mysql_operate.db.select_db(sql)[0]
+            data_dis[int(ans[0])][tmp['disease']-1] *= (tmp['w'] * 0.01)#第几个框
+            # a = 1 if b == 2 else 3
+
     print(data_dis)
     return jsonify("hahaha")
 
