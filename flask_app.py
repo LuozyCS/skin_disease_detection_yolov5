@@ -133,12 +133,12 @@ def get_ans():
         dis1 = mysql_operate.db.select_db(sql)[0]
         sug.append({"dis1": dis1})
 
-        if eachdis[tmpdis1] - eachdis[tmpdis2] <= 0.3 and eachdis[tmpdis2] != 0.0:
+        if eachdis[tmpdis1] - eachdis[tmpdis2] <= 0.40 and eachdis[tmpdis2] != 0.0:
             print("111")
             sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis2 + 1)
             dis2 = mysql_operate.db.select_db(sql)[0]
             sug[-1]['dis2'] = dis2
-        if eachdis[tmpdis2] - eachdis[tmpdis3] <= 0.3 and eachdis[tmpdis3] != 0.0:
+        if eachdis[tmpdis2] - eachdis[tmpdis3] <= 0.25 and eachdis[tmpdis3] != 0.0:
             print("222")
             sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis3 + 1)
             dis3 = mysql_operate.db.select_db(sql)[0]
