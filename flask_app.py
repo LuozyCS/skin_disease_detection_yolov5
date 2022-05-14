@@ -12,6 +12,8 @@ import json
 import numpy as np
 from backend.predict import predict
 from pathlib import Path
+import math
+from copy import deepcopy
 
 from common import mysql_operate  # 从common包中导入mysql_operate，使用其db
 
@@ -100,6 +102,7 @@ def get_ans():
     #print(data_ans)
     #print(data_dis)
     print("---------------------------")
+    origin_data_dis = data_dis
     print(data_dis)
     for ans in data_ans:
         # if ans.find('P') == -1:#P不做改变
@@ -109,13 +112,45 @@ def get_ans():
             elif ans.__contains__('N'): 
                 sql = "SELECT disease, weightsDown as w FROM Question WHERE id = " + ans[ans.find('Q')+1 : ans.find('N')]
             tmp = mysql_operate.db.select_db(sql)[0]
-            data_dis[int(ans[0])][tmp['disease']-1] *= (tmp['w'] * 0.01)#第几个框
+            #data_dis[int(ans[0])][tmp['disease']-1] *= (tmp['w'] * 0.01)
+            #考虑函数y = 2/pi(arctanx)和y = 1-exp（-x）,作为权重修改的模型
+            tmpX = - math.log(1 - data_dis[int(ans[0])][tmp['disease']-1])
+            tmpX += tmp['w'] * 0.01
+            data_dis[int(ans[0])][tmp['disease']-1] = 1 - math.exp(-tmpX)
 
-    #截断最大值为1        
-    data_dis = list(map( lambda x:list(map(lambda y:min(y,1.0), x)), data_dis))
+    #截断最大值为1,截断最小值为0     
+    data_dis = list(map( lambda x:list(map(lambda y:max(min(y,1.0),0.0), x)), data_dis))   
+    ans = {"origin":origin_data_dis,"dis":data_dis}
+    sug = []
+    for eachdis in data_dis:
+        tmpArr = deepcopy(eachdis)
+        tmpArr.sort()
 
+        tmpdis1 = eachdis.index(tmpArr[-1])
+        tmpdis2 = eachdis.index(tmpArr[-2])
+        tmpdis3 = eachdis.index(tmpArr[-3])
+        sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis1 + 1)
+        dis1 = mysql_operate.db.select_db(sql)[0]
+        sug.append({"dis1": dis1})
+
+        if eachdis[tmpdis1] - eachdis[tmpdis2] <= 0.3 and eachdis[tmpdis2] != 0.0:
+            print("111")
+            sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis2 + 1)
+            dis2 = mysql_operate.db.select_db(sql)[0]
+            sug[-1]['dis2'] = dis2
+        if eachdis[tmpdis2] - eachdis[tmpdis3] <= 0.3 and eachdis[tmpdis3] != 0.0:
+            print("222")
+            sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis3 + 1)
+            dis3 = mysql_operate.db.select_db(sql)[0]
+            sug[-1]['dis3'] = dis3
+
+    ans['sugesstions'] = sug
     print(data_dis)
-    return jsonify("hahaha")
+    print("---------------------------")
+    print("...........................")
+    print(ans)
+    print("...........................")
+    return jsonify(ans)
 
 @app.after_request
 def add_headers(response):
@@ -127,6 +162,3 @@ def add_headers(response):
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1')
     #app.run(debug=False, host='127.0.0.1')
-
-
-
