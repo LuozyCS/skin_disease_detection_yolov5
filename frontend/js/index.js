@@ -55,6 +55,8 @@ function communicate(img_base64_url) {
     }
   });
 }
+
+
 var qt_global;
 var dt_global;
 function sendMsg() {
@@ -80,7 +82,8 @@ function sendMsg() {
   var protocol = window.location.protocol.toString();
   var host = document.domain.toString();
   var quesURL = protocol + '//' + host + ":5000/quesback/";
-   
+  
+  //传问卷和接结果的
   $.ajax({
     url: quesURL,
     type: "POST",
@@ -93,15 +96,26 @@ function sendMsg() {
       alert("问卷内容出错，请重新填写")
     }
     else {
-      
+      showSuggestions(response_data.origin, response_data.dis, response_data.suggestions)
     }
   });
-
 }
+
+
+//显示结果
+function showSuggestions(origin, dis, suggestions){
+  // document.getElementById('video').style.display = "none";
+  // canvas.style.display = "";
+  // myout.style.display = "";
+  // document.getElementById('image').style.display = "";
+  //innerHTML应该可以塞进去，但是按道理来说塞不进去
+  
+  myout.innerHTML = html;
+}
+
 
 let mediaStreamTrack = null; // 视频对象(全局)
 let video;
-
 function takePhoto() {
   //获得Canvas对象
   let video = document.getElementById('video');
@@ -119,6 +133,7 @@ function takePhoto() {
 
 }
 
+//display
 function openMedia() {
   let constraints = {
     video: { width: 500, height: 500 },
@@ -137,10 +152,12 @@ function openMedia() {
     canvas.style.display = "none";
     myout.style.display = "none";
     document.getElementById('image').style.display = "none";
+    document.getElementById('jcjg').style.display = "none";
   });
 }
 
 // 关闭摄像头
+//display
 function closeMedia() {
   let stream = document.getElementById('video').srcObject;
   let tracks = stream.getTracks();
@@ -152,6 +169,7 @@ function closeMedia() {
   canvas.style.display = "none";
   myout.style.display = "none";
   document.getElementById('image').style.display = "";
+  document.getElementById('jcjg').style.display = "none";
   //document.getElementById('video').style.display="none";
 
 }
@@ -161,7 +179,7 @@ function parseFiles(files) {
   const file = files[0];
   const imageType = /image.*/;
   if (file.type.match(imageType)) {
-    warning.innerHTML = '';
+    //warning.innerHTML = '';
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -182,13 +200,14 @@ function handleFiles() {
   parseFiles(fileInput.files);
 }
 
+//display
 // 上传图片按钮的回调函数
 function clickUploader() {
   canvas.style.display = "none";
   myout.style.display = "none";
   document.getElementById('video').style.display = "none";
   document.getElementById('image').style.display = "";
-
+  document.getElementById('jcjg').style.display = "none";
   fileInput.click();
 
 }
@@ -203,6 +222,7 @@ function selectColor(index) {
 
 }
 
+//display
 // 在图片上绘制检测结果
 function drawResult(results) {
   canvas.width = image.width;
@@ -244,6 +264,7 @@ function drawResult(results) {
   canvas.style.display = "";
   myout.style.display = "";
   document.getElementById('image').style.display = "";
+  document.getElementById('jcjg').style.display = "";
 }
 
 //把各框截图和问卷循环写到主页
@@ -263,7 +284,7 @@ function output(question_table, results) {
     height = bbox[3] - bbox[1];
     var newImg = new Image();
     cutImg(bbox[0], bbox[1], width, height, image.height, image.width);
-
+    html +='<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     //myout.innerHTML = '<canvas id=\"test' + index + '\"></canvas>'
     html += "<img src=\"" + image1.src + "\" />"
 
@@ -277,10 +298,11 @@ function output(question_table, results) {
           '<input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "N" + '\">否</input>' +
           '<input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "P" + '\" checked="checked">不知道</input>' +
           '</ol>' +
-          '</div>';
+          '</div>'
       }
     }
     rectIndex += 1;
+    html += '</div></div>'
   }
   html += '</form>';
 

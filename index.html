@@ -20,21 +20,22 @@
   <!-- <h1 class='title'>皮肤病检测项目中期演示</h1> -->
   <div id="container" style="margin-top: 60px;">
     <div id="camera">
-      <button onclick="openMedia()">开启摄像头</button>
+      <button type="button" class="layui-btn layui-btn-lg" onclick="openMedia()">开启摄像头</button>
       <canvas id="canvas1" width="500px" height="500px" style="display: none;"></canvas>
-      <button onclick="takePhoto()">拍照</button>
+      <button type="button" class="layui-btn layui-btn-lg" onclick="takePhoto()">拍照</button>
+      <button type="button" class="layui-btn layui-btn-lg" onClick="clickUploader()">上传文件</button>
       <!-- <img id="imgTag" src="" alt="imgTag"> -->
       <!-- <button onclick="closeMedia()">关闭摄像头</button> -->
     </div>
     <div id="text-container">
-      <p id="instruction" class="red-color">
-        <button id="uploader-btn" onClick="clickUploader()">上传文件</button>
-      <p id="warning" class="result-color"></p>
+      <!-- <p id="instruction" class="red-color"> -->
+        <!-- <button id="uploader-btn" onClick="clickUploader()">上传文件</button> -->
+      <!-- <p id="warning" class="result-color"></p> -->
       <img src="" id="image" class="center" style="display: none;">
       <video id="video" width="500px" height="500px" autoplay="autoplay" style="display: none;"></video>
-      <p class="result-color">
-        检测结果：
-      </p>
+      <fieldset id="jcjg" class="layui-elem-field layui-field-title" style="margin-top: 20px;display: none;">
+        <legend>检测结果</legend>
+      </fieldset>  
       <input name="imgFile" type="file" id="fileUploader" accept="image/*" onChange="handleFiles()">
     </div>
 
