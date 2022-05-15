@@ -48,8 +48,17 @@ function communicate(img_base64_url) {
       console.log(response_data.class_results)//可以把标准框附件的类输出出来
       console.log(response_data.disease_table)
       console.log(response_data.question_table)
-      drawResult(response_data.results);
-      output(response_data.question_table, response_data.results);
+      var tmpResult = response_data.results;
+      for (bboxInfo of tmpResult) {
+        var w = image.width / realWidth;
+        var h = image.height / realHeight;
+        bboxInfo['bbox'][0] = bboxInfo['bbox'][0] * w;
+        bboxInfo['bbox'][2] = bboxInfo['bbox'][2] * w;
+        bboxInfo['bbox'][1] = bboxInfo['bbox'][1] * h;
+        bboxInfo['bbox'][3] = bboxInfo['bbox'][3] * h;
+      }
+      drawResult(tmpResult);
+      output(response_data.question_table, tmpResult);
       qt_global = response_data.question_table;
       dt_global = response_data.disease_table;
     }
@@ -174,6 +183,8 @@ function closeMedia() {
 
 }
 
+var realHeight;
+var realWidth;
 // 处理用户上传图片，发送至服务器并绘制检测结果 
 function parseFiles(files) {
   const file = files[0];
@@ -182,7 +193,26 @@ function parseFiles(files) {
     //warning.innerHTML = '';
     const reader = new FileReader();
     reader.readAsDataURL(file);
+    reader.onload = function(e){
+      let img = new Image();
+      img.src = e.target.result;//获取编码后的值,也可以用this.result获取
+      img.onload = function () {
+          console.log('height:'+this.height+'----width:'+this.width)
+          realHeight = this.height;
+          realWidth = this.width;
+      }
+    }
     reader.onloadend = () => {
+      
+      // let tmpImg = new Image();
+      // tmpImg.src = e.target.result;;
+      // tmpImg.onload = function(){
+      //   realHeight = this.height;
+      //   realWidth = this.width;
+      // }
+      // console.log("........................")
+      // console.log(realHeight+"/"+realWidth+"/"+image.height+"/"+image.width);
+
       image.src = reader.result;
       // send the img to server
       communicate(reader.result);
@@ -229,7 +259,7 @@ function drawResult(results) {
   canvas.height = image.height;
   ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(image, 0, 0);
+  ctx.drawImage(image,0,0, canvas.width, canvas.height);
   var index = 0;
   var totalClasses = new Array();
   for (bboxInfo of results) {
