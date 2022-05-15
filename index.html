@@ -20,28 +20,39 @@
   <!-- <h1 class='title'>皮肤病检测项目中期演示</h1> -->
   <div id="container" style="margin-top: 60px;">
     <div id="camera">
-      <button type="button" class="layui-btn layui-btn-lg" onclick="openMedia()">开启摄像头</button>
-      <canvas id="canvas1" width="500px" height="500px" style="display: none;"></canvas>
-      <button type="button" class="layui-btn layui-btn-lg" onclick="takePhoto()">拍照</button>
-      <button type="button" class="layui-btn layui-btn-lg" onClick="clickUploader()">上传文件</button>
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          请选择使用方式：
+          <div class="layui-inline">
+            <button type="button" class="layui-btn layui-btn-lg" onclick="openMedia()">开启摄像头</button>
+            <canvas id="canvas1" width="500px" height="500px" style="display: none;"></canvas>
+            <button type="button" class="layui-btn layui-btn-lg" onclick="takePhoto()">拍照</button>
+          </div>
+          或&nbsp; &nbsp;
+          <div class="layui-inline">
+            <button type="button" class="layui-btn layui-btn-lg" onClick="clickUploader()">上传文件</button>
+          </div>
+        </div>
+      </div>
       <!-- <img id="imgTag" src="" alt="imgTag"> -->
       <!-- <button onclick="closeMedia()">关闭摄像头</button> -->
     </div>
-    <div id="text-container">
-      <!-- <p id="instruction" class="red-color"> -->
-        <!-- <button id="uploader-btn" onClick="clickUploader()">上传文件</button> -->
-      <!-- <p id="warning" class="result-color"></p> -->
-      <img src="" id="image" class="center" style="display: none;">
-      <video id="video" width="500px" height="500px" autoplay="autoplay" style="display: none;"></video>
-      <fieldset id="jcjg" class="layui-elem-field layui-field-title" style="margin-top: 20px;display: none;">
-        <legend>检测结果</legend>
-      </fieldset>  
-      <input name="imgFile" type="file" id="fileUploader" accept="image/*" onChange="handleFiles()">
-    </div>
+  </div>
 
+  <div id="text-container" class="center" style="width: 33%;">
+    <!-- <p id="instruction" class="red-color"> -->
+    <!-- <button id="uploader-btn" onClick="clickUploader()">上传文件</button> -->
+    <!-- <p id="warning" class="result-color"></p> -->
+    <img src="" id="image"  style="display: none;object-fit: cover;">
+    <video id="video" width="500px" height="500px" autoplay="autoplay" style="display: none;object-fit: contain;"></video>
+    <fieldset id="jcjg" class="layui-elem-field layui-field-title" style="margin-top: 20px;display: none;">
+      <legend>检测结果</legend>
+    </fieldset>
+    <input name="imgFile" type="file" id="fileUploader" accept="image/*" onChange="handleFiles()">
+  </div>
 
-
-    <canvas id="canvas" style="display: none;"></canvas>
+  <div id="text-container" class="center" style="width: 33%;">
+    <canvas id="canvas" style="display: none; object-fit: contain;"></canvas>
     <div id="myout" style="display: none;"></div>
   </div>
   <script src="frontend/js/index.js"></script>

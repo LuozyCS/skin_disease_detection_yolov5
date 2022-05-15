@@ -102,7 +102,7 @@ def get_ans():
     #print(data_ans)
     #print(data_dis)
     print("---------------------------")
-    origin_data_dis = data_dis
+    origin_data_dis = deepcopy(data_dis)
     print(data_dis)
     for ans in data_ans:
         # if ans.find('P') == -1:#P不做改变
