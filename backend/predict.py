@@ -43,7 +43,8 @@ def predict(opt, model, img):
         model.half()  # to FP16
 
     # Set Dataloader
-    dataset = LoadImages(opt['source'], img_size=imgsz)
+    # dataset = LoadImages(opt['source'], img_size=imgsz)
+    dataset = LoadImages(source, img, img_size=imgsz)
 
     # Get names and colors
     names = model.module.names if hasattr(model, 'module') else model.names
@@ -52,7 +53,8 @@ def predict(opt, model, img):
     t0 = time.time()
     img = torch.zeros((1, 3, imgsz, imgsz), device=device)  # init img
     _ = model(img.half() if half else img) if device.type != 'cpu' else None  # run once
-    for path, img, im0s, vid_cap, s in dataset:
+    # for path, img, im0s, vid_cap, s in dataset:
+    for path, img, im0s in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0

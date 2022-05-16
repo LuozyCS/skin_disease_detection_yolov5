@@ -8,7 +8,7 @@
     "iou_thres" : 0.45,
     "view_img" : false,
     "save_img" : true,
-    "save_txt" : true,
+    "save_txt" : false,
     "classes" : null,
     "agnostic_nms" : false,
     "augment" : false,

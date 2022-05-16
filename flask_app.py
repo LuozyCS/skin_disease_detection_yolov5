@@ -1,5 +1,6 @@
 import enum
 from os import TMP_MAX
+from pickletools import uint8
 from tkinter.messagebox import QUESTION
 from turtle import distance
 from models.experimental import attempt_load
@@ -41,14 +42,18 @@ def get_prediction():
     img = Image.open(io.BytesIO(image)) # 打开文件
     if (img.mode != 'RGB'):
         img = img.convert("RGB")
-
-    save_path = str(Path(opt['source']) / Path("img4predict.jpg")) # 保存路径
-    img.save(save_path) # 保存文件
+        
+    # save_path = str(Path(opt['source']) / Path("img4predict.jpg")) # 保存路径
+    # img.save(save_path) # 保存文件
 
     # img.save("./frontend/static/images/img4predict.jpg")  
 
     # convert to numpy array.
-    img_arr = np.array(img)
+    img_arr = np.array(np.array(img)[:, :, ::-1])
+    # open("C:\\Users\\dell\\Desktop\\nptest.txt",'w').writelines(list(map(lambda x:str(x), img_arr)))
+    # import cv2
+    # print("&&&&&&&&&&&&&&&&&&&")
+    # print((img_arr == cv2.imread("C:\\Users\\dell\\Desktop\\melanoma_test_11.JPG")).all())
     # print('img_arr shape = %s \n' % str(img_arr.shape))
 
     results = predict(opt, model, img_arr) # 预测图像
