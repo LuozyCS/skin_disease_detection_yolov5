@@ -41,8 +41,10 @@ def get_prediction():
     img = Image.open(io.BytesIO(image)) # 打开文件
     if (img.mode != 'RGB'):
         img = img.convert("RGB")
+
     save_path = str(Path(opt['source']) / Path("img4predict.jpg")) # 保存路径
     img.save(save_path) # 保存文件
+
     # img.save("./frontend/static/images/img4predict.jpg")  
 
     # convert to numpy array.
@@ -131,20 +133,20 @@ def get_ans():
         tmpdis3 = eachdis.index(tmpArr[-3])
         sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis1 + 1)
         dis1 = mysql_operate.db.select_db(sql)[0]
-        sug.append({"dis1": dis1})
+        sug.append(dis1)
 
-        if eachdis[tmpdis1] - eachdis[tmpdis2] <= 0.40 and eachdis[tmpdis2] != 0.0:
-            print("111")
-            sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis2 + 1)
-            dis2 = mysql_operate.db.select_db(sql)[0]
-            sug[-1]['dis2'] = dis2
-        if eachdis[tmpdis2] - eachdis[tmpdis3] <= 0.25 and eachdis[tmpdis3] != 0.0:
-            print("222")
-            sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis3 + 1)
-            dis3 = mysql_operate.db.select_db(sql)[0]
-            sug[-1]['dis3'] = dis3
+        # if eachdis[tmpdis1] - eachdis[tmpdis2] <= 0.40 and eachdis[tmpdis2] != 0.0:
+        #     print("111")
+        #     sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis2 + 1)
+        #     dis2 = mysql_operate.db.select_db(sql)[0]
+        #     sug[-1]['dis2'] = dis2
+        # if eachdis[tmpdis2] - eachdis[tmpdis3] <= 0.25 and eachdis[tmpdis3] != 0.0:
+        #     print("222")
+        #     sql = "SELECT diseaseName as n, diseaseSuggestions as s FROM Suggestions WHERE disease = " + str(tmpdis3 + 1)
+        #     dis3 = mysql_operate.db.select_db(sql)[0]
+        #     sug[-1]['dis3'] = dis3
 
-    ans['sugesstions'] = sug
+    ans['suggestions'] = sug
     print(data_dis)
     print("---------------------------")
     print("...........................")
@@ -160,5 +162,6 @@ def add_headers(response):
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1')
+    app.run(host='0.0.0.0')
+    # app.run(debug=True, host='127.0.0.1')
     #app.run(debug=False, host='127.0.0.1')

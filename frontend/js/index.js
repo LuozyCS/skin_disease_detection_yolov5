@@ -28,7 +28,8 @@ function preventDefaults(e) {
   e.preventDefault() //取消事件的默认动作
   e.stopPropagation() //停止事件的传播，阻止它被分派到其他Document节点。
 };
-
+var gloResult;
+var gloQuestion;
 // 发送图片到服务器, 接收检测结果,就是后端传过来的box，并在canvas上绘图 
 function communicate(img_base64_url) {
   //使用AJAX
@@ -57,6 +58,8 @@ function communicate(img_base64_url) {
         bboxInfo['bbox'][1] = bboxInfo['bbox'][1] * h;
         bboxInfo['bbox'][3] = bboxInfo['bbox'][3] * h;
       }
+      gloResult = tmpResult;
+      gloQuestion = response_data.question_table;
       drawResult(tmpResult);
       output(response_data.question_table, tmpResult);
       qt_global = response_data.question_table;
@@ -105,19 +108,49 @@ function sendMsg() {
       alert("问卷内容出错，请重新填写")
     }
     else {
-      showSuggestions(response_data.origin, response_data.dis, response_data.suggestions)
+      showSuggestions(response_data.origin, response_data.dis, response_data.suggestions,gloResult,gloQuestion)
     }
   });
 }
 
 //显示结果
-function showSuggestions(origin, dis, suggestions){
+function showSuggestions(origin, dis, suggestions,results,question_table){
   // document.getElementById('video').style.display = "none";
   // canvas.style.display = "";
   // myout.style.display = "";
   // document.getElementById('image').style.display = "";
   //innerHTML应该可以塞进去，但是按道理来说塞不进去
   
+  var rectIndex = 0;
+  var html = '';
+  html += '<form>';
+  console.log(suggestions);
+  console.log(results);
+  for (sugges of suggestions) {
+    //把这个框的截图输出
+    console.log(sugges);
+    bbox = results[rectIndex]['bbox'];
+    width = bbox[2] - bbox[0];
+    height = bbox[3] - bbox[1];
+    cutImg(bbox[0], bbox[1], width, height, image.height, image.width);
+    html +='<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
+    html += "<img src=\"" + image1.src + "\" />"
+    
+    html += '<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">' +
+              '<ul class="layui-tab-title">' +
+                '<li class="layui-this">综合诊断结果与建议</li>' +
+                '<li>详细诊断结果</li>' +
+              '</ul>' +
+              '<div class="layui-tab-content" style="height: 100px;">' +
+                '<div class="layui-tab-item layui-show">综合诊断结果为：'+sugges['n']+'</div>' +
+                '<div class="layui-tab-item">内容2</div>' +
+              '</div>' +
+            '</div> '
+    rectIndex += 1;
+    html += '</div></div>'
+  }
+  html += '</form>';
+
   myout.innerHTML = html;
 }
 
@@ -380,7 +413,7 @@ function output(question_table, results) {
   }
   html += '</form>';
 
-  html += '<button onclick="sendMsg()">提交问卷</button>'
+  html += '<button type="button" class="layui-btn layui-btn-lg" onclick="sendMsg()">提交问卷</button>'
 
   myout.innerHTML = html;
 }
