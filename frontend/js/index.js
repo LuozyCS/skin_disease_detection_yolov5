@@ -9,7 +9,7 @@ const image1 = new Image();
 // const URL = "http://localhost:5000/predict/"
 // const URL = "http://192.168.16.121:5000/predict/"
 
-
+var firstFlag = 0;
 // 获取服务器端URL 
 function GetUrl() {
   var protocol = window.location.protocol.toString();
@@ -40,7 +40,7 @@ function communicate(img_base64_url) {
     dataType: "json"
   }).done(function (response_data) {
     //console.log(response_data);
-    if (response_data == null) {
+    if (response_data == null && firstFlag == 1) {
       alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
     }
     else {
@@ -127,6 +127,7 @@ let video;
 var videoW;
 var videoH;
 function takePhoto() {
+  firstFlag = 1;
   //获得Canvas对象
   let video = document.getElementById('video');
   let canvas1 = document.getElementById('canvas1');
@@ -275,6 +276,7 @@ function handleFiles() {
 //display
 // 上传图片按钮的回调函数
 function clickUploader() {
+  firstFlag = 1;
   canvas.style.display = "none";
   myout.style.display = "none";
   document.getElementById('video').style.display = "none";
