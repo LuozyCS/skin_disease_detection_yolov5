@@ -21,6 +21,8 @@ def predict(opt, model, img):
     """
     hight_thres = img.shape[1] * 0.05
     width_thres = img.shape[0] * 0.05
+    print(hight_thres)
+    print(width_thres)
     out, source, view_img, save_img, save_txt, imgsz = \
         opt['output'], opt['source'], opt['view_img'], opt['save_img'], opt['save_txt'], opt['imgsz']
 
@@ -149,7 +151,7 @@ def predict(opt, model, img):
         
         boxes1_belongs_to_boxes = []
         
-        for index_in_boxes_detected, place in enumerate(boxes_detected) :
+        for place in boxes_detected :
             boxes1_belongs_to_boxes.append([])
             for place1 in boxes_detected1 :
                 if abs(place['bbox'][0] - place1['bbox'][0]) < width_thres and abs(place['bbox'][1] - place1['bbox'][1]) < hight_thres \
@@ -160,7 +162,7 @@ def predict(opt, model, img):
                     
                 
     results = {"results": boxes_detected,"class_results":boxes1_belongs_to_boxes}
-    #print(results)
+    print(results)
     #print(boxes1_belongs_to_boxes)#筛选出来的boundingbox结果
     return results
 

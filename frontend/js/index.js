@@ -110,7 +110,6 @@ function sendMsg() {
   });
 }
 
-
 //显示结果
 function showSuggestions(origin, dis, suggestions){
   // document.getElementById('video').style.display = "none";
@@ -125,31 +124,65 @@ function showSuggestions(origin, dis, suggestions){
 
 let mediaStreamTrack = null; // 视频对象(全局)
 let video;
+var videoW;
+var videoH;
 function takePhoto() {
   //获得Canvas对象
   let video = document.getElementById('video');
-  let canvas = document.getElementById('canvas1');
-  let ctx = canvas.getContext('2d');
-  ctx.drawImage(video, 0, 0, 500, 500);
+  let canvas1 = document.getElementById('canvas1');
+  canvas1.width = image.width;
+  canvas1.height = image.height;
+  let ctx = canvas1.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas1.width, canvas1.height);
   closeMedia();
 
   // toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
-  let img = document.getElementById('canvas1').toDataURL();
+  var img = document.getElementById('canvas1').toDataURL();
   // 这里的img就是得到的图片
   console.log('img-----', img);
   document.getElementById('image').src = img;//上传
+
+  $(function(){
+    var imgSrc = $("#image").attr("src");
+    getImageWidth(imgSrc,function(w,h){
+        console.log({width:w,height:h});
+        realHeight = h;
+        realWidth = w;
+    });
+  });
+  // var imagetmp = $("#image");
+  // var imageSize = new Image()
+  // imageSize.src = imagetmp.attr("src");
+  // realHeight = imageSize.height;
+  // realWidth = imageSize.width;
+  // console.log('height:'+realHeight+'----width:'+realWidth)
   communicate(img);
 
 }
 
+// 获取图片真实高度
+function getImageWidth(url,callback){
+  var img = new Image();
+  img.src = url;
+  // 如果图片被缓存，则直接返回缓存数据
+  if(img.complete){
+      callback(img.width, img.height);
+  }else{
+      img.onload = function(){
+          callback(img.width, img.height);
+      }
+  }
+}
+
 //display
 function openMedia() {
-  let constraints = {
-    video: { width: 500, height: 500 },
-    audio: false
-  };
   //获得video摄像头
   video = document.getElementById('video');
+  let constraints = {
+    video: { width: image.width, height: image.height },
+    audio: false
+  };
+
   let promise = navigator.mediaDevices.getUserMedia(constraints);
   promise.then((mediaStream) => {
     // mediaStreamTrack = typeof mediaStream.stop === 'function' ? mediaStream : mediaStream.getTracks()[1];
@@ -162,7 +195,16 @@ function openMedia() {
     myout.style.display = "none";
     document.getElementById('image').style.display = "none";
     document.getElementById('jcjg').style.display = "none";
+
   });
+  //---------------------------------
+  // let video = document.getElementById('video');
+  // let canvas1 = document.getElementById('canvas1');
+  // let ctx = canvas1.getContext('2d');
+  // ctx.drawImage(video, 0, 0);
+  // var img = document.getElementById('canvas1').toDataURL();
+  // document.getElementById('image').src = img;
+  // document.getElementById('image').style.display = "none";
 }
 
 // 关闭摄像头
@@ -312,8 +354,8 @@ function output(question_table, results) {
     bbox = results[rectIndex]['bbox'];
     width = bbox[2] - bbox[0];
     height = bbox[3] - bbox[1];
-    var newImg = new Image();
     cutImg(bbox[0], bbox[1], width, height, image.height, image.width);
+    //console.log(image.height+"**"+image.width);
     html +='<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     //myout.innerHTML = '<canvas id=\"test' + index + '\"></canvas>'
     html += "<img src=\"" + image1.src + "\" />"
@@ -349,27 +391,17 @@ function cutImg(left, top, width, height, container_height, container_width) {
   canvas_bak.height = container_height;
   ctx_bak.drawImage(image, 0, 0, container_width, container_height);
 
-  const canvas = document.createElement('CANVAS');
+  var canvas = document.createElement('CANVAS');
   canvas.width = width;
   canvas.height = height;
-  const ctx = canvas.getContext('2d');
+  var ctx = canvas.getContext('2d');
   ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, width, height);
   ctx.drawImage(canvas_bak, left, top, width, height,
     0, 0, width, height
   );
-
-  //const value = Number(document.getElementById('sel').value);
   const code = canvas.toDataURL();
-  //const image1 = new Image();
   image1.src = code;
-  //return image1;
-  // image1.onload = () => {
-  //   const des = document.getElementById('myout');
-  //   //des.innerHTML += '';
-  //   des.appendChild(image1);
-  //   //compress_img = image1;
-  // };
 }
 
 // 初始化函数
