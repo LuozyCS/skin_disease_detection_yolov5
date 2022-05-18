@@ -94,13 +94,13 @@ function sendMsg() {
   var protocol = window.location.protocol.toString();
   var host = document.domain.toString();
   var quesURL = protocol + '//' + host + ":5000/quesback/";
-  
+
   //传问卷和接结果的
   $.ajax({
     url: quesURL,
     type: "POST",
     contentType: "application/json",
-    data: JSON.stringify({ "ans": answerArr , "disease": dt_global}), //使用base64编码
+    data: JSON.stringify({ "ans": answerArr, "disease": dt_global }), //使用base64编码
     dataType: "json"
   }).done(function (response_data) {
     //console.log(response_data);
@@ -108,19 +108,19 @@ function sendMsg() {
       alert("问卷内容出错，请重新填写")
     }
     else {
-      showSuggestions(response_data.origin, response_data.dis, response_data.suggestions,gloResult,gloQuestion)
+      showSuggestions(response_data.origin, response_data.dis, response_data.suggestions, gloResult, gloQuestion)
     }
   });
 }
 
 //显示结果
-function showSuggestions(origin, dis, suggestions,results,question_table){
+function showSuggestions(origin, dis, suggestions, results, question_table) {
   // document.getElementById('video').style.display = "none";
   // canvas.style.display = "";
   // myout.style.display = "";
   // document.getElementById('image').style.display = "";
   //innerHTML应该可以塞进去，但是按道理来说塞不进去
-  
+
   var rectIndex = 0;
   var html = '';
   html += '<form>';
@@ -133,21 +133,68 @@ function showSuggestions(origin, dis, suggestions,results,question_table){
     width = bbox[2] - bbox[0];
     height = bbox[3] - bbox[1];
     cutImg(bbox[0], bbox[1], width, height, image.height, image.width);
-    html +='<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
+    html += '<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     html += "<img src=\"" + image1.src + "\" />"
-    
+
     html += '<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">' +
-              '<ul class="layui-tab-title">' +
-                '<li class="layui-this">综合诊断结果与建议</li>' +
-                '<li>详细诊断结果</li>' +
-              '</ul>' +
-              '<div class="layui-tab-content" style="height: 100px;">' +
-                '<div class="layui-tab-item layui-show">综合诊断结果为：'+sugges['n']+'</div>' +
-                '<div class="layui-tab-item">内容2</div>' +
+      '<ul class="layui-tab-title">' +
+      '<li class="layui-this">综合诊断结果与建议</li>' +
+      '<li>详细诊断结果</li>' +
+      '</ul>' +
+      '<div class="layui-tab-content" style="">' +
+      '<div class="layui-tab-item layui-show">综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] + '</div>' +
+      '<div class="layui-tab-item">' +
+      '各疾病综合诊断分数（0到1）：<br>' +
+      '<table class="layui-table" lay-skin="line"><colgroup><col width="20%"><col width="40%"><col width="40%"><col></colgroup><thead>' +
+                  '<tr>'+
+                    '<th>疾病种类</th>' +
+                    '<th>图像诊断分数</th>' +
+                    '<th>综合诊断分数</th>' +
+                  '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                  '<tr>' +
+                    '<td>黑色素瘤</td>'+
+                    '<td>' + origin[rectIndex][0] + '</td>' +
+                    '<td>' + dis[rectIndex][0] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>黑色素痣</td>'+
+                    '<td>' + origin[rectIndex][1] + '</td>' +
+                    '<td>' + dis[rectIndex][1] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>痤疮</td>'+
+                    '<td>' + origin[rectIndex][2] + '</td>' +
+                    '<td>' + dis[rectIndex][2] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>荨麻疹</td>'+
+                    '<td>' + origin[rectIndex][3] + '</td>' +
+                    '<td>' + dis[rectIndex][3] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>体癣/td>'+
+                    '<td>' + origin[rectIndex][4] + '</td>' +
+                    '<td>' + dis[rectIndex][4] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>鸡眼</td>'+
+                    '<td>' + origin[rectIndex][5] + '</td>' +
+                    '<td>' + dis[rectIndex][5] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>白癜风</td>'+
+                    '<td>' + origin[rectIndex][6] + '</td>' +
+                    '<td>' + dis[rectIndex][6] + '</td>' +
+                  '</tr>' +
+                '</tbody>' +
+              '</table>' +
               '</div>' +
-            '</div> '
-    rectIndex += 1;
-    html += '</div></div>'
+            '</div>' +
+          '</div> '
+        rectIndex += 1;
+        html += '</div></div > '
   }
   html += '</form>';
 
@@ -176,12 +223,12 @@ function takePhoto() {
   console.log('img-----', img);
   document.getElementById('image').src = img;//上传
 
-  $(function(){
+  $(function () {
     var imgSrc = $("#image").attr("src");
-    getImageWidth(imgSrc,function(w,h){
-        console.log({width:w,height:h});
-        realHeight = h;
-        realWidth = w;
+    getImageWidth(imgSrc, function (w, h) {
+      console.log({ width: w, height: h });
+      realHeight = h;
+      realWidth = w;
     });
   });
   // var imagetmp = $("#image");
@@ -195,16 +242,16 @@ function takePhoto() {
 }
 
 // 获取图片真实高度
-function getImageWidth(url,callback){
+function getImageWidth(url, callback) {
   var img = new Image();
   img.src = url;
   // 如果图片被缓存，则直接返回缓存数据
-  if(img.complete){
+  if (img.complete) {
+    callback(img.width, img.height);
+  } else {
+    img.onload = function () {
       callback(img.width, img.height);
-  }else{
-      img.onload = function(){
-          callback(img.width, img.height);
-      }
+    }
   }
 }
 
@@ -269,17 +316,17 @@ function parseFiles(files) {
     //warning.innerHTML = '';
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = function(e){
+    reader.onload = function (e) {
       let img = new Image();
       img.src = e.target.result;//获取编码后的值,也可以用this.result获取
       img.onload = function () {
-          console.log('height:'+this.height+'----width:'+this.width)
-          realHeight = this.height;
-          realWidth = this.width;
+        console.log('height:' + this.height + '----width:' + this.width)
+        realHeight = this.height;
+        realWidth = this.width;
       }
     }
     reader.onloadend = () => {
-      
+
       // let tmpImg = new Image();
       // tmpImg.src = e.target.result;;
       // tmpImg.onload = function(){
@@ -336,7 +383,7 @@ function drawResult(results) {
   canvas.height = image.height;
   ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(image,0,0, canvas.width, canvas.height);
+  ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
   var index = 0;
   var totalClasses = new Array();
   for (bboxInfo of results) {
@@ -391,7 +438,7 @@ function output(question_table, results) {
     height = bbox[3] - bbox[1];
     cutImg(bbox[0], bbox[1], width, height, image.height, image.width);
     //console.log(image.height+"**"+image.width);
-    html +='<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
+    html += '<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     //myout.innerHTML = '<canvas id=\"test' + index + '\"></canvas>'
     html += "<img src=\"" + image1.src + "\" />"
 
