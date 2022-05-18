@@ -1,4 +1,7 @@
-
+var form;
+layui.use('form',function(){
+form = layui.form;
+});
 const image = document.getElementById('image');
 const canvas = document.getElementById('canvas');
 const warning = document.getElementById('warning');
@@ -428,7 +431,7 @@ function output(question_table, results) {
   //不能用class作为变量名
   var rectIndex = 0;
   var html = '';
-  html += '<form>';
+  
   for (var rect of question_table) {
     //var html = '';
 
@@ -440,29 +443,31 @@ function output(question_table, results) {
     //console.log(image.height+"**"+image.width);
     html += '<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     //myout.innerHTML = '<canvas id=\"test' + index + '\"></canvas>'
-    html += "<img src=\"" + image1.src + "\" />"
-
+    html += "<img src=\"" + image1.src + "\"/>"
+    html += '<form class="layui-form">'
     //把这个框的问题输出
     for (var queclass of rect) {
       for (var que of queclass) {
         //html+='<p>'+que['questionContent']+'</p>';
-        html += '<div class="divCss">' + "Q" + que['id'] + ":" + que['questionContent'] +
-          '<ol type="A" start="" class="olCss" name="single">' +
-          '<input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "Y" + '\">是</input>' +
-          '<input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "N" + '\">否</input>' +
-          '<input class="inputClass" type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "P" + '\" checked="checked">不知道</input>' +
-          '</ol>' +
-          '</div>'
+        html += '<div class="layui-form-item">' + '<div class="">' + que['questionContent'] + '</div>'+
+          '<div class="layui-input-block" name="single">' +
+          '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "Y\"" + ' title=\"是\"></input>' +
+          '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "N\"" + ' title=\"否\"></input>' +
+          '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "P\"" + ' title=\"不知道\" checked></input>' +
+          '</div>' +
+          '</div>' 
       }
     }
     rectIndex += 1;
+    html += '</form>'
     html += '</div></div>'
   }
-  html += '</form>';
+  
 
   html += '<button type="button" class="layui-btn layui-btn-lg" onclick="sendMsg()">提交问卷</button>'
 
   myout.innerHTML = html;
+  form.render();
 }
 
 function cutImg(left, top, width, height, container_height, container_width) {

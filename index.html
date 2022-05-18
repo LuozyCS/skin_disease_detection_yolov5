@@ -5,6 +5,11 @@
   <link rel="stylesheet" type="text/css" href="frontend/css/style.css">
   <link rel="stylesheet" href="frontend/css/layui.css">
   <script src="frontend/js/jquery.min.js"></script>
+  <style>
+    .layui-form-radio{
+      font-size: 10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -39,6 +44,7 @@
     </div>
   </div>
 
+
   <div id="text-container" class="center" style="width: 33%;">
     <!-- <p id="instruction" class="red-color"> -->
     <!-- <button id="uploader-btn" onClick="clickUploader()">上传文件</button> -->
@@ -56,15 +62,18 @@
     <canvas id="canvas" style="display: none; width: 100%;"></canvas>
     <div id="myout" style="display: none;"></div>
   </div>
+  
+  <script src="frontend/layui.js" charset="utf-8"></script>
+
   <script src="frontend/js/index.js"></script>
 
-  <script src="frontend/js/layui.js" charset="utf-8"></script>
   <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
-  <script>
-    layui.use('element', function () {
+  <script type="text/javascript">
+    layui.use(['element', 'form'],function () {
       var $ = layui.jquery
         , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
-
+        var form = layui.form;
+        form.render('radio');
       //触发事件
       var active = {
         tabAdd: function () {
