@@ -162,7 +162,9 @@ def predict(opt, model, img):
         
 
                     
-                
+    for tmprect in boxes1_belongs_to_boxes:
+        for tmpclass in tmprect:
+            tmpclass['conf'] = str(round(float(tmpclass['conf']),5))  
     results = {"results": boxes_detected,"class_results":boxes1_belongs_to_boxes}
     print(results)
     #print(boxes1_belongs_to_boxes)#筛选出来的boundingbox结果

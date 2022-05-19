@@ -123,7 +123,7 @@ def get_ans():
             #考虑函数y = 2/pi(arctanx)和y = 1-exp（-x）,作为权重修改的模型
             tmpX = - math.log(1 - data_dis[int(ans[0])][tmp['disease']-1])
             tmpX += tmp['w'] * 0.01
-            data_dis[int(ans[0])][tmp['disease']-1] = 1 - math.exp(-tmpX)
+            data_dis[int(ans[0])][tmp['disease']-1] = round(1 - math.exp(-tmpX),5)
 
     #截断最大值为1,截断最小值为0     
     data_dis = list(map( lambda x:list(map(lambda y:max(min(y,1.0),0.0), x)), data_dis))   

@@ -148,6 +148,7 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
       '<div class="layui-tab-item layui-show">综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] + '</div>' +
       '<div class="layui-tab-item">' +
       '各疾病综合诊断分数（0到1）：<br>' +
+      '<div style="overflow-x:auto">' +
       '<table class="layui-table" lay-skin="line"><colgroup><col width="20%"><col width="40%"><col width="40%"><col></colgroup><thead>' +
                   '<tr>'+
                     '<th>疾病种类</th>' +
@@ -193,6 +194,7 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
                   '</tr>' +
                 '</tbody>' +
               '</table>' +
+              '</div>' +
               '</div>' +
             '</div>' +
           '</div> '
@@ -444,13 +446,13 @@ function output(question_table, results) {
     html += '<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     //myout.innerHTML = '<canvas id=\"test' + index + '\"></canvas>'
     html += "<img src=\"" + image1.src + "\"/>"
-    html += '<form class="layui-form">'
+    html += '<form class="layui-form" >'
     //把这个框的问题输出
     for (var queclass of rect) {
       for (var que of queclass) {
         //html+='<p>'+que['questionContent']+'</p>';
         html += '<div class="layui-form-item">' + '<div class="">' + que['questionContent'] + '</div>'+
-          '<div class="layui-input-block" name="single">' +
+          '<div class="layui-input" name="single">' +
           '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "Y\"" + ' title=\"是\"></input>' +
           '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "N\"" + ' title=\"否\"></input>' +
           '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "P\"" + ' title=\"不知道\" checked></input>' +
