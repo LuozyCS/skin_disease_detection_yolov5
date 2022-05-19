@@ -20,8 +20,25 @@ function GetUrl() {
   var host = document.domain.toString();
   var port = window.location.port.toString();
   var url = protocol + '//' + host + ":5000/predict/";
-  return url;
+  console.log(123123);
+  //判断电脑或手机
+if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+  //手机
+  $('#text-container').width("80%");
+  $('#text-container1').width("80%");
+} else {
+  console.log();
+  // document.getElementById('text-container').style.width;
+  
+  // console.log(document.getElementById('text-container1').style.width);
+  //document.getElementsByName('contan2').style.width = 70 + "%";
+    console.log("这是电脑");  //电脑
 }
+
+  return url;     
+}
+
+
 
 const URL = GetUrl()
 // alert(URL);
@@ -501,6 +518,7 @@ function output(question_table, results) {
 
   myout.innerHTML = html;
   form.render();
+    
 }
 
 function cutImg(left, top, width, height, container_height, container_width) {

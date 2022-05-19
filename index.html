@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="frontend/css/layui.css">
   <script src="frontend/js/jquery.min.js"></script>
   <style>
-    .layui-form-radio{
+    .layui-form-radio {
       font-size: 10px;
     }
   </style>
@@ -29,7 +29,7 @@
         <div class="layui-inline">
           请选择使用方式：
           <div class="layui-inline">
-            <button type="button" class="layui-btn layui-btn-lg" onclick="openMedia()">开启摄像头</button>
+            <button id="sxt" type="button" class="layui-btn layui-btn-lg" onclick="openMedia()">开启摄像头</button>
 
             <button type="button" class="layui-btn layui-btn-lg" onclick="takePhoto()">拍照</button>
           </div>
@@ -45,7 +45,7 @@
   </div>
 
 
-  <div id="text-container" class="center" style="width: 40%;">
+  <div name="contan1" id="text-container" class="center" style="width: 40%;text-align: center;">
     <!-- <p id="instruction" class="red-color"> -->
     <!-- <button id="uploader-btn" onClick="clickUploader()">上传文件</button> -->
     <!-- <p id="warning" class="result-color"></p> -->
@@ -58,22 +58,22 @@
     <input name="imgFile" type="file" id="fileUploader" accept="image/*" onChange="handleFiles()">
   </div>
 
-  <div id="text-container" class="center" style="width: 40%;">
+  <div name="contan2" id="text-container1" class="center" style="width: 40%;text-align: center;">
     <canvas id="canvas" style="display: none; width: 100%;"></canvas>
     <div id="myout" style="display: none;"></div>
   </div>
-  
+
   <script src="frontend/layui.js" charset="utf-8"></script>
 
   <script src="frontend/js/index.js"></script>
 
   <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
   <script type="text/javascript">
-    layui.use(['element', 'form'],function () {
+    layui.use(['element', 'form'], function () {
       var $ = layui.jquery
         , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
-        var form = layui.form;
-        form.render('radio');
+      var form = layui.form;
+      form.render('radio');
       //触发事件
       var active = {
         tabAdd: function () {
