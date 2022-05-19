@@ -446,16 +446,47 @@ function output(question_table, results) {
     html += '<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     //myout.innerHTML = '<canvas id=\"test' + index + '\"></canvas>'
     html += "<img src=\"" + image1.src + "\"/>"
+    //显示初步诊断结果
+    html += '<br><div class="layui-elem-quote" style="font-size:medium;">'
+    html += '<p>'
+
+
+
+    switch(results[rectIndex]['name']){
+      case 'melanoma':
+        html += '该病变部位系统根据图像初步识别为：黑色素瘤。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
+        break;
+      case 'nevus':
+        html += '该病变部位系统根据图像初步识别为：黑色素痣。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
+        break;
+      case 'vitiligo':
+        html += '该病变部位系统根据图像初步识别为：白癜风。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
+        break;
+      case 'acne':
+        html += '该病变部位系统根据图像初步识别为：痤疮。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
+        break;
+      case 'corn':
+        html += '该病变部位系统根据图像初步识别为：鸡眼。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
+        break;
+      case 'tinea_corporis':
+        html += '该病变部位系统根据图像初步识别为：体癣。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
+        break;
+      case 'urticaria':
+        html += '该病变部位系统根据图像初步识别为：荨麻疹。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
+        break;
+      
+    }
+    html += '</p></div>'
     html += '<form class="layui-form" >'
     //把这个框的问题输出
     for (var queclass of rect) {
       for (var que of queclass) {
         //html+='<p>'+que['questionContent']+'</p>';
-        html += '<div class="layui-form-item">' + '<div class="">' + que['questionContent'] + '</div>'+
-          '<div class="layui-input" name="single">' +
-          '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "Y\"" + ' title=\"是\"></input>' +
-          '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "N\"" + ' title=\"否\"></input>' +
-          '<input type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "P\"" + ' title=\"不知道\" checked></input>' +
+        html += '<div class="layui-form-item">' + '<div class="" style="font-size:large">' + que['questionContent'] + '？</div>'+
+          '<div  class="" name="single">' +
+          '<input  type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "Y\"" + ' title=\"是\"></input>' +
+          '<input  type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "N\"" + ' title=\"否\"></input>' +
+          '<input  type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "P\"" + ' title=\"不知道\" checked></input>' +
           '</div>' +
           '</div>' 
       }
