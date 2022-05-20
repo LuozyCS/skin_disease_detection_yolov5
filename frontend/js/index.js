@@ -27,7 +27,18 @@ if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobi
   //#号是根据id找element
   $('#text-container').width("80%");
   $('#text-container1').width("80%");
-  //$('#')
+  //$('#pcbutton').display("none");
+  document.getElementById("pcbutton").style.display = "none";
+  var htmlA = '<div id="pcbutton" class="layui-form-item">' +
+                  '<div class="layui-inline">' +
+                    '您正在使用手机端，请：' +
+                    '<div class="layui-inline">' +
+                      '<button type="button" class="layui-btn layui-btn-lg" onClick="clickUploader()">上传图片</button>' +
+                    '</div>' +
+                  '</div>' +
+              '</div>'
+  document.getElementById("camera").innerHTML = htmlA;
+  
 } else {
   console.log();
   // document.getElementById('text-container').style.width;
