@@ -182,8 +182,8 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
 
     html += '<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">' +
       '<ul class="layui-tab-title">' +
-      '<li class="layui-this">综合诊断结果与建议</li>' +
-      '<li>详细诊断结果</li>' +
+      '<li class="layui-this">诊断结果与建议</li>' +
+      '<li>诊断详情</li>' +
       '</ul>' +
       '<div class="layui-tab-content" style="">' +
       '<div class="layui-tab-item layui-show">综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] + '</div>' +
