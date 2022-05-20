@@ -152,13 +152,20 @@ def predict(opt, model, img):
         #boxes_detected是标准模型预测出来的，boxes_detected1是低阈值模型预测出来的。
         
         boxes1_belongs_to_boxes = []
-        
+        print("--------")
+        print(boxes_detected1)
         for place in boxes_detected :
             boxes1_belongs_to_boxes.append([])
+            flagFind = 0
             for place1 in boxes_detected1 :
+                print("1")
                 if abs(place['bbox'][0] - place1['bbox'][0]) < width_thres and abs(place['bbox'][1] - place1['bbox'][1]) < hight_thres \
                     and abs(place['bbox'][2] - place1['bbox'][2]) < width_thres and abs(place['bbox'][3] - place1['bbox'][3]) < hight_thres: 
                     boxes1_belongs_to_boxes[-1].append(place1)
+                    flagFind = 1
+            if flagFind == 0:
+                #原本在标准模型中的框在低阈值里一个没找到，就把原来的放进去
+                boxes1_belongs_to_boxes[-1].append(place)
         
 
                     

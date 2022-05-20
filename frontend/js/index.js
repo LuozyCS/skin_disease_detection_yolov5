@@ -24,8 +24,10 @@ function GetUrl() {
   //判断电脑或手机
 if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
   //手机
+  //#号是根据id找element
   $('#text-container').width("80%");
   $('#text-container1').width("80%");
+  //$('#')
 } else {
   console.log();
   // document.getElementById('text-container').style.width;
@@ -286,7 +288,8 @@ function openMedia() {
     audio: false
   };
 
-  let promise = navigator.mediaDevices.getUserMedia(constraints);
+  let promise = navigator.mediaDevices.getUserMedia(constraints);//html5的标准  可能已经被淘汰,新的api为MediaDevices.getUserMedia
+  //let promise = MediaDevices.getVideoTracks
   promise.then((mediaStream) => {
     // mediaStreamTrack = typeof mediaStream.stop === 'function' ? mediaStream : mediaStream.getTracks()[1];
     mediaStreamTrack = mediaStream.getVideoTracks()
