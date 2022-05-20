@@ -2,6 +2,12 @@ var form;
 layui.use('form',function(){
 form = layui.form;
 });
+
+// var elemlayui;
+// layui.use('element', function () {
+//   elemlayui = layui.element;
+// });
+
 const image = document.getElementById('image');
 const canvas = document.getElementById('canvas');
 const warning = document.getElementById('warning');
@@ -38,7 +44,7 @@ if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobi
                   '</div>' +
               '</div>'
   document.getElementById("camera").innerHTML = htmlA;
-  
+  //elemlayui.progress('demo', '20%');
 } else {
   console.log();
   // document.getElementById('text-container').style.width;
@@ -46,6 +52,7 @@ if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobi
   // console.log(document.getElementById('text-container1').style.width);
   //document.getElementsByName('contan2').style.width = 70 + "%";
     console.log("这是电脑");  //电脑
+    //elemlayui.progress('demo', '20%');
 }
 
   return url;     
@@ -76,6 +83,8 @@ function communicate(img_base64_url) {
     //console.log(response_data);
     if (response_data == null && firstFlag == 1) {
       alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
+      document.getElementById("sendMsgBut").style.display="none";
+      //elemlayui.progress('demo', '20%');
     }
     else {
       //alert(response_data.class_results[1]['name'])
@@ -97,6 +106,7 @@ function communicate(img_base64_url) {
       output(response_data.question_table, tmpResult);
       qt_global = response_data.question_table;
       dt_global = response_data.disease_table;
+      //elemlayui.progress('demo', '66%');
     }
   });
 }
@@ -127,7 +137,7 @@ function sendMsg() {
   var protocol = window.location.protocol.toString();
   var host = document.domain.toString();
   var quesURL = protocol + '//' + host + ":5000/quesback/";
-
+  //elemlayui.progress('demo', '66.6%');
   //传问卷和接结果的
   $.ajax({
     url: quesURL,
@@ -153,7 +163,8 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
   // myout.style.display = "";
   // document.getElementById('image').style.display = "";
   //innerHTML应该可以塞进去，但是按道理来说塞不进去
-
+  //elemlayui.progress('demo', '100%');
+  document.getElementById("sendMsgBut").style.display="none";
   var rectIndex = 0;
   var html = '';
   html += '<form>';
@@ -208,7 +219,7 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
                     '<td>' + dis[rectIndex][3] + '</td>' +
                   '</tr>' +
                   '<tr>' +
-                    '<td>体癣/td>'+
+                    '<td>体癣</td>'+
                     '<td>' + origin[rectIndex][4] + '</td>' +
                     '<td>' + dis[rectIndex][4] + '</td>' +
                   '</tr>' +
@@ -300,6 +311,8 @@ function openMedia() {
   };
 
   let promise = navigator.mediaDevices.getUserMedia(constraints);//html5的标准  可能已经被淘汰,新的api为MediaDevices.getUserMedia
+  //elemlayui.progress('demo', '50%');
+  // document.getElementById('layuiprogress').innerHTML = '<div id="" class="layui-progress-bar" lay-percent="88%"></div>';
   //let promise = MediaDevices.getVideoTracks
   promise.then((mediaStream) => {
     // mediaStreamTrack = typeof mediaStream.stop === 'function' ? mediaStream : mediaStream.getTracks()[1];
@@ -415,12 +428,14 @@ function selectColor(index) {
 //display
 // 在图片上绘制检测结果
 function drawResult(results) {
+  
   canvas.width = image.width;
   canvas.height = image.height;
   ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
   var index = 0;
+  var tmpindex = 1;
   var totalClasses = new Array();
   for (bboxInfo of results) {
     bbox = bboxInfo['bbox'];
@@ -445,7 +460,9 @@ function drawResult(results) {
 
     ctx.font = "20px Arial";
 
-    let content = class_name + " " + parseFloat(score).toFixed(2);
+    //let content = class_name + " " + parseFloat(score).toFixed(2);
+    let content = tmpindex;
+    tmpindex += 1;
     ctx.fillText(content, bbox[0], bbox[1] < 20 ? bbox[1] + 30 : bbox[1] - 5);
   }
   //画完了才显示出图片，新加的，后面还要隐藏问卷等
@@ -459,12 +476,12 @@ function drawResult(results) {
 
 //把各框截图和问卷循环写到主页
 function output(question_table, results) {
-
+  document.getElementById("sendMsgBut").style.display="";
   //不能用for in 一定要用for of
   //不能用class作为变量名
   var rectIndex = 0;
   var html = '';
-  
+  html += '<br><blockquote class="layui-elem-quote layui-quote-nm" style="font-size:medium;">注：检测结果框中序号对应以下图片中的序号</blockquote>'
   for (var rect of question_table) {
     //var html = '';
 
@@ -480,12 +497,12 @@ function output(question_table, results) {
     //显示初步诊断结果
     html += '<br><div class="layui-elem-quote" style="font-size:medium;">'
     html += '<p>'
-
+    html += '<p>此图为' + (rectIndex+1) +'号图片</p>'
 
 
     switch(results[rectIndex]['name']){
       case 'melanoma':
-        html += '该病变部位系统根据图像初步识别为：黑色素瘤。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
+        html += '<p>该病变部位系统根据图像初步识别为：黑色素瘤。</p><p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
         break;
       case 'nevus':
         html += '该病变部位系统根据图像初步识别为：黑色素痣。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
@@ -528,8 +545,8 @@ function output(question_table, results) {
   }
   
 
-  html += '<button type="button" class="layui-btn layui-btn-lg" onclick="sendMsg()">提交问卷</button>'
-
+  // html += '<br><br><button type="button" class="layui-btn layui-btn-lg layui-btn-radius site-demo-active" data-type="setPercent4" onclick="sendMsg()">提交问卷</button><br><br>'
+  document.getElementById("sendMsgBut").style.display="";
   myout.innerHTML = html;
   form.render();
     

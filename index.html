@@ -29,18 +29,21 @@
         <div class="layui-inline">
           请选择使用方式：
           <div class="layui-inline">
-            <button id="sxt" type="button" class="layui-btn layui-btn-lg" onclick="openMedia()">开启摄像头</button>
+            <button id="sxt" type="button" class="layui-btn layui-btn-lg layui-btn-radius site-demo-active" data-type="setPercent1" onclick="openMedia()">开启摄像头</button>
 
-            <button type="button" class="layui-btn layui-btn-lg" onclick="takePhoto()">拍照</button>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-radius site-demo-active" data-type="setPercent2" onclick="takePhoto()">拍照</button>
           </div>
           或&nbsp; &nbsp;
           <div class="layui-inline">
-            <button type="button" class="layui-btn layui-btn-lg" onClick="clickUploader()">上传图片</button>
+            <button type="button" class="layui-btn layui-btn-lg layui-btn-radius site-demo-active" data-type="setPercent3" onClick="clickUploader()">上传图片</button>
           </div>
         </div>
       </div>
       <!-- <img id="imgTag" src="" alt="imgTag"> -->
       <!-- <button onclick="closeMedia()">关闭摄像头</button> -->
+      <div id="layuiprogress" class="layui-progress layui-progress-big"  lay-filter="demo" lay-showpercent="true">
+        <div id="progresslay" class="layui-progress-bar" lay-percent="0%"></div>
+      </div>
     </div>
   </div>
 
@@ -61,6 +64,7 @@
   <div name="contan2" id="text-container1" class="center" style="width: 40%;text-align: center;">
     <canvas id="canvas" style="display: none; width: 100%;"></canvas>
     <div id="myout" style="display: none;"></div>
+    <br><br><button type="button" id="sendMsgBut" class="layui-btn layui-btn-lg layui-btn-radius site-demo-active" data-type="setPercent4" onclick="sendMsg()" style="display: none;">提交问卷</button><br><br>
   </div>
 
   <script src="frontend/layui.js" charset="utf-8"></script>
@@ -76,6 +80,22 @@
       form.render('radio');
       //触发事件
       var active = {
+        setPercent1: function(){
+          //设置50%进度
+          element.progress('demo', '33%')
+        },
+        setPercent2: function(){
+          //设置50%进度
+          element.progress('demo', '66%')
+        },
+        setPercent3: function(){
+          //设置50%进度
+          element.progress('demo', '66%')
+        },
+        setPercent4: function(){
+          //设置50%进度
+          element.progress('demo', '100%')
+        },
         tabAdd: function () {
           //新增一个Tab项
           element.tabAdd('demo', {
