@@ -31,15 +31,20 @@ function GetUrl() {
 if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
   //手机
   //#号是根据id找element
-  $('#text-container').width("80%");
-  $('#text-container1').width("80%");
+  $('#text-container').width("90%");
+  $('#text-container1').width("90%");
   //$('#pcbutton').display("none");
   document.getElementById("pcbutton").style.display = "none";
   var htmlA = '<div id="pcbutton" class="layui-form-item">' +
                   '<div class="layui-inline">' +
                     '您正在使用手机端，请：' +
                     '<div class="layui-inline">' +
+                      '<div class="layui-inline">' +
+                        '<input type="file" accept="image/*" class="layui-btn layui-btn-lg" capture="camera" id="picFile" onchange="readPhone(this)" / >'  +
+                      '</div>' +
+                      '<div class="layui-inline">' +
                       '<button type="button" class="layui-btn layui-btn-lg" onClick="clickUploader()">上传图片</button>' +
+                      '</div>' +
                     '</div>' +
                   '</div>' +
               '</div>'
@@ -58,6 +63,32 @@ if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobi
   return url;     
 }
 
+function readPhone(obj){   
+  var file = obj.files[0];      
+  //判断类型是不是图片  不难发现这个检测是基于正则表达式的，因此可以进行各种复杂的匹配，非常有用。
+  if(!/image\/\w+/.test(file.type)){     
+          alert("请确保文件为图像类型");   
+          return false;   
+  }   
+  var reader = new FileReader();   
+  reader.readAsDataURL(file);   
+  reader.onload = function(e){ 
+    let img = new Image();
+    img.src = e.target.result;
+    image.src = this.result;
+    img.onload = function () {
+      console.log('height:' + this.height + '----width:' + this.width)
+      realHeight = this.height;
+      realWidth = this.width;
+    }
+  }
+  reader.onloadend = () => {
+    image.src = reader.result;
+    // send the img to server
+    communicate(reader.result);
+  }
+      
+} 
 
 
 const URL = GetUrl()
@@ -375,15 +406,6 @@ function parseFiles(files) {
       }
     }
     reader.onloadend = () => {
-
-      // let tmpImg = new Image();
-      // tmpImg.src = e.target.result;;
-      // tmpImg.onload = function(){
-      //   realHeight = this.height;
-      //   realWidth = this.width;
-      // }
-      // console.log("........................")
-      // console.log(realHeight+"/"+realWidth+"/"+image.height+"/"+image.width);
 
       image.src = reader.result;
       // send the img to server
