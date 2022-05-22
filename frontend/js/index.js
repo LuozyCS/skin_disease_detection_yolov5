@@ -1,6 +1,6 @@
 var form;
-layui.use('form',function(){
-form = layui.form;
+layui.use('form', function () {
+  form = layui.form;
 });
 
 // var elemlayui;
@@ -28,54 +28,54 @@ function GetUrl() {
   var url = protocol + '//' + host + ":5000/predict/";
   console.log(123123);
   //判断电脑或手机
-if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-  //手机
-  //#号是根据id找element
-  $('#text-container').width("90%");
-  $('#text-container1').width("90%");
-  //$('#pcbutton').display("none");
-  document.getElementById("pcbutton").style.display = "none";
-  var htmlA = '<div id="pcbutton" class="layui-form-item">' +
-                  '<br>' +
-                  '<div class="layui-inline" style="color: white;">' +
-                    '您正在使用手机端，请：' +
-                    '<div class="layui-inline">' +
-                      '<div class="layui-inline">' +
-                        '<input type="file" accept="image/*" class="border-color: rgba(255,255,255,.2);layui-btn layui-btn-primary" style="color: white;" capture="camera" id="picFile" onchange="readPhone(this)" / >'  +
-                      '</div>' +
-                      // '或&nbsp; &nbsp;' +
-                      // '<div class="layui-inline">' +
-                      // '<button type="button" class="layui-btn layui-btn-primary" style="color: white;" onClick="clickUploader()">上传图片</button>' +
-                      // '</div>' +
-                    '</div>' +
-                  '</div>' +
-              '</div>' +
-              '<br>'
-  document.getElementById("camera").innerHTML = htmlA;
-  //elemlayui.progress('demo', '20%');
-} else {
-  console.log();
-  // document.getElementById('text-container').style.width;
-  
-  // console.log(document.getElementById('text-container1').style.width);
-  //document.getElementsByName('contan2').style.width = 70 + "%";
+  if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+    //手机
+    //#号是根据id找element
+    $('#text-container').width("90%");
+    $('#text-container1').width("90%");
+    //$('#pcbutton').display("none");
+    document.getElementById("pcbutton").style.display = "none";
+    var htmlA = '<div id="pcbutton" class="layui-form-item">' +
+      '<br>' +
+      '<div style="color: white;">' +
+      '您正在使用手机端，请：<br>' +
+      '<div class="layui-inline">' +
+      '<div class="layui-inline">' +
+      '<input type="file" accept="image/*" class="border-color: rgba(255,255,255,.2);layui-btn layui-btn-primary" style="text-align: center;color: white;" capture="camera" id="picFile" onchange="readPhone(this)" / >' +
+      '</div>' +
+      // '或&nbsp; &nbsp;' +
+      // '<div class="layui-inline">' +
+      // '<button type="button" class="layui-btn layui-btn-primary" style="color: white;" onClick="clickUploader()">上传图片</button>' +
+      // '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '<br>'
+    document.getElementById("camera").innerHTML = htmlA;
+    //elemlayui.progress('demo', '20%');
+  } else {
+    console.log();
+    // document.getElementById('text-container').style.width;
+
+    // console.log(document.getElementById('text-container1').style.width);
+    //document.getElementsByName('contan2').style.width = 70 + "%";
     console.log("这是电脑");  //电脑
     //elemlayui.progress('demo', '20%');
+  }
+
+  return url;
 }
 
-  return url;     
-}
-
-function readPhone(obj){   
-  var file = obj.files[0];      
+function readPhone(obj) {
+  var file = obj.files[0];
   //判断类型是不是图片  不难发现这个检测是基于正则表达式的，因此可以进行各种复杂的匹配，非常有用。
-  if(!/image\/\w+/.test(file.type)){     
-          alert("请确保文件为图像类型");   
-          return false;   
-  }   
-  var reader = new FileReader();   
-  reader.readAsDataURL(file);   
-  reader.onload = function(e){ 
+  if (!/image\/\w+/.test(file.type)) {
+    alert("请确保文件为图像类型");
+    return false;
+  }
+  var reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = function (e) {
     let img = new Image();
     img.src = e.target.result;
     image.src = this.result;
@@ -90,8 +90,8 @@ function readPhone(obj){
     // send the img to server
     communicate(reader.result);
   }
-      
-} 
+
+}
 
 
 const URL = GetUrl()
@@ -117,7 +117,7 @@ function communicate(img_base64_url) {
     //console.log(response_data);
     if (response_data == null && firstFlag == 1) {
       alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
-      document.getElementById("sendMsgBut").style.display="none";
+      document.getElementById("sendMsgBut").style.display = "none";
       //elemlayui.progress('demo', '20%');
     }
     else {
@@ -198,7 +198,7 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
   // document.getElementById('image').style.display = "";
   //innerHTML应该可以塞进去，但是按道理来说塞不进去
   //elemlayui.progress('demo', '100%');
-  document.getElementById("sendMsgBut").style.display="none";
+  document.getElementById("sendMsgBut").style.display = "none";
   var rectIndex = 0;
   var html = '';
   html += '<form>';
@@ -213,133 +213,133 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
     cutImg(bbox[0], bbox[1], width, height, image.height, image.width);
     html += '<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     html += "<img src=\"" + image1.src + "\" />"
-    if(dis[rectIndex][0] <= 0.05 && dis[rectIndex][1] <= 0.05 && dis[rectIndex][2] <= 0.05 && dis[rectIndex][3] <= 0.05 && dis[rectIndex][4] <= 0.05 && dis[rectIndex][5] <= 0.05 && dis[rectIndex][6] <= 0.05){
+    if (dis[rectIndex][0] <= 0.05 && dis[rectIndex][1] <= 0.05 && dis[rectIndex][2] <= 0.05 && dis[rectIndex][3] <= 0.05 && dis[rectIndex][4] <= 0.05 && dis[rectIndex][5] <= 0.05 && dis[rectIndex][6] <= 0.05) {
       html += '<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">' +
-      '<ul class="layui-tab-title">' +
-      '<li class="layui-this">诊断结果与建议</li>' +
-      '<li>诊断详情</li>' +
-      '</ul>' +
-      '<div class="layui-tab-content" style="">' +
-      '<div class="layui-tab-item layui-show">图片序号：' + (rectIndex + 1) + '<br>综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] +'<br><br><div style="color:red;font-size:medium">注：该结果综合诊断分数过低（<0.05），可能存在误诊，请患者谨慎判断。</div>' + '</div>' +
-      '<div class="layui-tab-item">' +
-      '各疾病综合诊断分数（0到1，分数越高属于该病的可能性越大）：<br>' +
-      '<div style="overflow-x:auto">' +
-      '<table class="layui-table" lay-skin="line"><colgroup><col width="20%"><col width="40%"><col width="40%"><col></colgroup><thead>' +
-                  '<tr>'+
-                    '<th>疾病种类</th>' +
-                    '<th>图像诊断分数</th>' +
-                    '<th>综合诊断分数</th>' +
-                  '</tr>' +
-                '</thead>' +
-                '<tbody>' +
-                  '<tr>' +
-                    '<td>黑色素瘤</td>'+
-                    '<td>' + origin[rectIndex][0] + '</td>' +
-                    '<td>' + dis[rectIndex][0] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>黑色素痣</td>'+
-                    '<td>' + origin[rectIndex][1] + '</td>' +
-                    '<td>' + dis[rectIndex][1] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>痤疮</td>'+
-                    '<td>' + origin[rectIndex][2] + '</td>' +
-                    '<td>' + dis[rectIndex][2] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>荨麻疹</td>'+
-                    '<td>' + origin[rectIndex][3] + '</td>' +
-                    '<td>' + dis[rectIndex][3] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>体癣</td>'+
-                    '<td>' + origin[rectIndex][4] + '</td>' +
-                    '<td>' + dis[rectIndex][4] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>鸡眼</td>'+
-                    '<td>' + origin[rectIndex][5] + '</td>' +
-                    '<td>' + dis[rectIndex][5] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>白癜风</td>'+
-                    '<td>' + origin[rectIndex][6] + '</td>' +
-                    '<td>' + dis[rectIndex][6] + '</td>' +
-                  '</tr>' +
-                '</tbody>' +
-              '</table>' +
-              '</div>' +
-              '</div>' +
-            '</div>' +
-          '</div> '
-        rectIndex += 1;
-        html += '</div></div > '
+        '<ul class="layui-tab-title">' +
+        '<li class="layui-this">诊断结果与建议</li>' +
+        '<li>诊断详情</li>' +
+        '</ul>' +
+        '<div class="layui-tab-content" style="">' +
+        '<div class="layui-tab-item layui-show">图片序号：' + (rectIndex + 1) + '<br>综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] + '<br><br><div style="color:red;font-size:medium">注：该结果综合诊断分数过低（<0.05），可能存在误诊，请患者谨慎判断。</div>' + '</div>' +
+        '<div class="layui-tab-item">' +
+        '各疾病综合诊断分数（0到1，分数越高属于该病的可能性越大）：<br>' +
+        '<div style="overflow-x:auto">' +
+        '<table class="layui-table" lay-skin="line"><colgroup><col width="20%"><col width="40%"><col width="40%"><col></colgroup><thead>' +
+        '<tr>' +
+        '<th>疾病种类</th>' +
+        '<th>图像诊断分数</th>' +
+        '<th>综合诊断分数</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+        '<tr>' +
+        '<td>黑色素瘤</td>' +
+        '<td>' + origin[rectIndex][0] + '</td>' +
+        '<td>' + dis[rectIndex][0] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>黑色素痣</td>' +
+        '<td>' + origin[rectIndex][1] + '</td>' +
+        '<td>' + dis[rectIndex][1] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>痤疮</td>' +
+        '<td>' + origin[rectIndex][2] + '</td>' +
+        '<td>' + dis[rectIndex][2] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>荨麻疹</td>' +
+        '<td>' + origin[rectIndex][3] + '</td>' +
+        '<td>' + dis[rectIndex][3] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>体癣</td>' +
+        '<td>' + origin[rectIndex][4] + '</td>' +
+        '<td>' + dis[rectIndex][4] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>鸡眼</td>' +
+        '<td>' + origin[rectIndex][5] + '</td>' +
+        '<td>' + dis[rectIndex][5] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>白癜风</td>' +
+        '<td>' + origin[rectIndex][6] + '</td>' +
+        '<td>' + dis[rectIndex][6] + '</td>' +
+        '</tr>' +
+        '</tbody>' +
+        '</table>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div> '
+      rectIndex += 1;
+      html += '</div></div > '
     }
-    else{
+    else {
       html += '<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">' +
-      '<ul class="layui-tab-title">' +
-      '<li class="layui-this">诊断结果与建议</li>' +
-      '<li>诊断详情</li>' +
-      '</ul>' +
-      '<div class="layui-tab-content" style="">' +
-      '<div class="layui-tab-item layui-show">图片序号：' + (rectIndex + 1) + '<br>综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] + '</div>' +
-      '<div class="layui-tab-item">' +
-      '各疾病综合诊断分数（0到1，分数越高属于该病的可能性越大）：<br>' +
-      '<div style="overflow-x:auto">' +
-      '<table class="layui-table" lay-skin="line"><colgroup><col width="20%"><col width="40%"><col width="40%"><col></colgroup><thead>' +
-                  '<tr>'+
-                    '<th>疾病种类</th>' +
-                    '<th>图像诊断分数</th>' +
-                    '<th>综合诊断分数</th>' +
-                  '</tr>' +
-                '</thead>' +
-                '<tbody>' +
-                  '<tr>' +
-                    '<td>黑色素瘤</td>'+
-                    '<td>' + origin[rectIndex][0] + '</td>' +
-                    '<td>' + dis[rectIndex][0] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>黑色素痣</td>'+
-                    '<td>' + origin[rectIndex][1] + '</td>' +
-                    '<td>' + dis[rectIndex][1] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>痤疮</td>'+
-                    '<td>' + origin[rectIndex][2] + '</td>' +
-                    '<td>' + dis[rectIndex][2] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>荨麻疹</td>'+
-                    '<td>' + origin[rectIndex][3] + '</td>' +
-                    '<td>' + dis[rectIndex][3] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>体癣</td>'+
-                    '<td>' + origin[rectIndex][4] + '</td>' +
-                    '<td>' + dis[rectIndex][4] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>鸡眼</td>'+
-                    '<td>' + origin[rectIndex][5] + '</td>' +
-                    '<td>' + dis[rectIndex][5] + '</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td>白癜风</td>'+
-                    '<td>' + origin[rectIndex][6] + '</td>' +
-                    '<td>' + dis[rectIndex][6] + '</td>' +
-                  '</tr>' +
-                '</tbody>' +
-              '</table>' +
-              '</div>' +
-              '</div>' +
-            '</div>' +
-          '</div> '
-        rectIndex += 1;
-        html += '</div></div > '
+        '<ul class="layui-tab-title">' +
+        '<li class="layui-this">诊断结果与建议</li>' +
+        '<li>诊断详情</li>' +
+        '</ul>' +
+        '<div class="layui-tab-content" style="">' +
+        '<div class="layui-tab-item layui-show">图片序号：' + (rectIndex + 1) + '<br>综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] + '</div>' +
+        '<div class="layui-tab-item">' +
+        '各疾病综合诊断分数（0到1，分数越高属于该病的可能性越大）：<br>' +
+        '<div style="overflow-x:auto">' +
+        '<table class="layui-table" lay-skin="line"><colgroup><col width="20%"><col width="40%"><col width="40%"><col></colgroup><thead>' +
+        '<tr>' +
+        '<th>疾病种类</th>' +
+        '<th>图像诊断分数</th>' +
+        '<th>综合诊断分数</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+        '<tr>' +
+        '<td>黑色素瘤</td>' +
+        '<td>' + origin[rectIndex][0] + '</td>' +
+        '<td>' + dis[rectIndex][0] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>黑色素痣</td>' +
+        '<td>' + origin[rectIndex][1] + '</td>' +
+        '<td>' + dis[rectIndex][1] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>痤疮</td>' +
+        '<td>' + origin[rectIndex][2] + '</td>' +
+        '<td>' + dis[rectIndex][2] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>荨麻疹</td>' +
+        '<td>' + origin[rectIndex][3] + '</td>' +
+        '<td>' + dis[rectIndex][3] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>体癣</td>' +
+        '<td>' + origin[rectIndex][4] + '</td>' +
+        '<td>' + dis[rectIndex][4] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>鸡眼</td>' +
+        '<td>' + origin[rectIndex][5] + '</td>' +
+        '<td>' + dis[rectIndex][5] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>白癜风</td>' +
+        '<td>' + origin[rectIndex][6] + '</td>' +
+        '<td>' + dis[rectIndex][6] + '</td>' +
+        '</tr>' +
+        '</tbody>' +
+        '</table>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div> '
+      rectIndex += 1;
+      html += '</div></div > '
     }
-    
+
   }
   html += '</form>';
 
@@ -523,7 +523,7 @@ function selectColor(index) {
 //display
 // 在图片上绘制检测结果
 function drawResult(results) {
-  
+
   canvas.width = image.width;
   canvas.height = image.height;
   ctx = canvas.getContext('2d');
@@ -572,7 +572,7 @@ function drawResult(results) {
 
 //把各框截图和问卷循环写到主页
 function output(question_table, results) {
-  document.getElementById("sendMsgBut").style.display="";
+  document.getElementById("sendMsgBut").style.display = "";
   //不能用for in 一定要用for of
   //不能用class作为变量名
   var rectIndex = 0;
@@ -593,10 +593,10 @@ function output(question_table, results) {
     //显示初步诊断结果
     html += '<br><div class="layui-elem-quote" style="font-size:medium;">'
     html += '<p>'
-    html += '<p>此图为' + (rectIndex+1) +'号图片</p>'
+    html += '<p>此图为' + (rectIndex + 1) + '号图片</p>'
 
 
-    switch(results[rectIndex]['name']){
+    switch (results[rectIndex]['name']) {
       case 'melanoma':
         html += '<p>该病变部位系统根据图像初步识别为：黑色素瘤。</p><p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
         break;
@@ -618,7 +618,7 @@ function output(question_table, results) {
       case 'urticaria':
         html += '该病变部位系统根据图像初步识别为：荨麻疹。<p>请填写下方症状问卷以获得更加准确的诊断结果。</p>';
         break;
-      
+
     }
     html += '</p></div>'
     html += '<form class="layui-form" >'
@@ -626,26 +626,26 @@ function output(question_table, results) {
     for (var queclass of rect) {
       for (var que of queclass) {
         //html+='<p>'+que['questionContent']+'</p>';
-        html += '<div class="layui-form-item">' + '<div class="" style="font-size:large">' + que['questionContent'] + '？</div>'+
+        html += '<div class="layui-form-item">' + '<div class="" style="font-size:large">' + que['questionContent'] + '？</div>' +
           '<div  class="" name="single">' +
           '<input  type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "Y\"" + ' title=\"是\"></input>' +
           '<input  type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "N\"" + ' title=\"否\"></input>' +
           '<input  type="radio" name="place' + rectIndex + "Q" + que['id'] + '\" value=\"' + rectIndex + "Q" + que['id'] + "P\"" + ' title=\"不知道\" checked></input>' +
           '</div>' +
-          '</div>' 
+          '</div>'
       }
     }
     rectIndex += 1;
     html += '</form>'
     html += '</div></div>'
   }
-  
+
 
   // html += '<br><br><button type="button" class="layui-btn layui-btn-lg layui-btn-radius site-demo-active" data-type="setPercent4" onclick="sendMsg()">提交问卷</button><br><br>'
-  document.getElementById("sendMsgBut").style.display="";
+  document.getElementById("sendMsgBut").style.display = "";
   myout.innerHTML = html;
   form.render();
-    
+
 }
 
 function cutImg(left, top, width, height, container_height, container_width) {

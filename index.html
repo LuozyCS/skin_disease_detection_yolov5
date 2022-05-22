@@ -29,7 +29,7 @@
     <!-- <div class="site-banner-bg" style="background-image: url(/autumn.jpg); background-size: cover;" autumn="">
     </div> -->
     <br>
-    <p style="padding-top: 15px;font-size: 30px;color: rgba(255,255,255,.8);"> 欢迎使用智能皮肤病诊断平台</p>
+    <p style="padding-top: 15px;font-size: 30px;color: rgba(255,255,255,.8);"> 欢迎使用<br>智能皮肤病诊断平台</p>
     <p style="color: rgba(255,255,255,.6);">
       <br>
       该平台采用深度学习算法结合问诊问卷对使用者所需检测的患病部位进行综合诊断。<br>目前可以识别的皮肤病种类有：黑色素瘤，黑色素痣，痤疮，荨麻疹，体癣，鸡眼，白癜风。<br><br>
@@ -125,14 +125,13 @@
             , btn: ['确定']
             , btnAlign: 'c'
             , moveType: 1 //拖拽模式，0或者1
-            , content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">你知道吗？亲！<br>layer ≠ layui<br><br> layer 只是作为 layui 的一个弹层模块，由于其用户基数较大，所以常常会有人以为 layui 是 <del>layerui</del><br><br>layer 虽然已被 Layui 收编为内置的弹层模块，但仍然会作为一个独立组件全力维护、升级 ^_^</div>'
+            , content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">1.上传图片：<br>若您在使用网页端：您可以通过"上传图片"按钮上传您需要检测的图片，或在网页内点击"打开摄像头"按钮，后对准备病变部位拍照以上传图片。<br> 若您在使用手机端：您可以点击"选择文件"按钮，后在手机上选择相机或是文件的方式上传图片。<br><br>2.填写问卷：<br>为保证识别的准确程度，避免误诊，在您得到"初步诊断结果"后，请填写对应病变部位的调查问卷，请您务必填写您的真实情况与感受，以便系统得到准确的结果。<br><br>3.结果：最终系统会给出基于您填写的问卷与图片综合判断的诊断结果，并且在"诊断详情界面"会有各个疾病的判断分数供您参考。<br>(注：该分数最大值为1，最小值为0，若所有类别分数均低于0.05则认为您可能没有患病或您的照片拍摄角度、光线不太好。)</div>'
             , success: function (layero) {
               // var btn = layero.find('.layui-layer-btn');
               // btn.find('.layui-layer-btn0').attr({
               //   href: '../index.html'
               //   , target: '_blank'
               // });
-              
             }
           });
         },
