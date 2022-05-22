@@ -594,7 +594,7 @@ html, body {
 }
 
 #container {
-  background: #c79ef812;
+  background: url(/autumn.jpg);
   padding: 20px;
   font-size: 14px;
   border-radius: 33px;

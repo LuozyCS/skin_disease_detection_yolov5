@@ -124,6 +124,8 @@ def get_ans():
             tmpX = - math.log(1 - data_dis[int(ans[0])][tmp['disease']-1])
             tmpX += tmp['w'] * 0.01
             data_dis[int(ans[0])][tmp['disease']-1] = round(1 - math.exp(-tmpX),5)
+            if data_dis[int(ans[0])][tmp['disease']-1] <= 0.0 :
+                data_dis[int(ans[0])][tmp['disease']-1] = 0.01
 
     #截断最大值为1,截断最小值为0     
     data_dis = list(map( lambda x:list(map(lambda y:max(min(y,1.0),0.0), x)), data_dis))   

@@ -36,18 +36,20 @@ if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobi
   //$('#pcbutton').display("none");
   document.getElementById("pcbutton").style.display = "none";
   var htmlA = '<div id="pcbutton" class="layui-form-item">' +
-                  '<div class="layui-inline">' +
+                  '<div class="layui-inline" style="color: white;">' +
                     '您正在使用手机端，请：' +
                     '<div class="layui-inline">' +
                       '<div class="layui-inline">' +
-                        '<input type="file" accept="image/*" class="layui-btn layui-btn-lg" capture="camera" id="picFile" onchange="readPhone(this)" / >'  +
+                        '<input type="file" accept="image/*" class="layui-btn layui-btn-primary" style="color: white;" capture="camera" id="picFile" onchange="readPhone(this)" / >'  +
                       '</div>' +
-                      '<div class="layui-inline">' +
-                      '<button type="button" class="layui-btn layui-btn-lg" onClick="clickUploader()">上传图片</button>' +
-                      '</div>' +
+                      // '或&nbsp; &nbsp;' +
+                      // '<div class="layui-inline">' +
+                      // '<button type="button" class="layui-btn layui-btn-primary" style="color: white;" onClick="clickUploader()">上传图片</button>' +
+                      // '</div>' +
                     '</div>' +
                   '</div>' +
-              '</div>'
+              '</div>' +
+              '<br>'
   document.getElementById("camera").innerHTML = htmlA;
   //elemlayui.progress('demo', '20%');
 } else {
@@ -210,16 +212,16 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
     cutImg(bbox[0], bbox[1], width, height, image.height, image.width);
     html += '<div class=\"layui-panel\">' + '<div style=\"padding: 50px 30px;\">'
     html += "<img src=\"" + image1.src + "\" />"
-
-    html += '<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">' +
+    if(dis[rectIndex][0] <= 0.05 && dis[rectIndex][1] <= 0.05 && dis[rectIndex][2] <= 0.05 && dis[rectIndex][3] <= 0.05 && dis[rectIndex][4] <= 0.05 && dis[rectIndex][5] <= 0.05 && dis[rectIndex][6] <= 0.05){
+      html += '<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">' +
       '<ul class="layui-tab-title">' +
       '<li class="layui-this">诊断结果与建议</li>' +
       '<li>诊断详情</li>' +
       '</ul>' +
       '<div class="layui-tab-content" style="">' +
-      '<div class="layui-tab-item layui-show">综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] + '</div>' +
+      '<div class="layui-tab-item layui-show">图片序号：' + (rectIndex + 1) + '<br>综合诊断结果为：' + sugges['n'] + '<br>注：该结果综合诊断分数过低（<0.05），可能存在误诊，请患者谨慎判断。' + '<br>治疗建议：' + sugges['s'] + '</div>' +
       '<div class="layui-tab-item">' +
-      '各疾病综合诊断分数（0到1）：<br>' +
+      '各疾病综合诊断分数（0到1，分数越高属于该病的可能性越大）：<br>' +
       '<div style="overflow-x:auto">' +
       '<table class="layui-table" lay-skin="line"><colgroup><col width="20%"><col width="40%"><col width="40%"><col></colgroup><thead>' +
                   '<tr>'+
@@ -272,6 +274,71 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
           '</div> '
         rectIndex += 1;
         html += '</div></div > '
+    }
+    else{
+      html += '<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">' +
+      '<ul class="layui-tab-title">' +
+      '<li class="layui-this">诊断结果与建议</li>' +
+      '<li>诊断详情</li>' +
+      '</ul>' +
+      '<div class="layui-tab-content" style="">' +
+      '<div class="layui-tab-item layui-show">图片序号：' + (rectIndex + 1) + '<br>综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] + '</div>' +
+      '<div class="layui-tab-item">' +
+      '各疾病综合诊断分数（0到1，分数越高属于该病的可能性越大）：<br>' +
+      '<div style="overflow-x:auto">' +
+      '<table class="layui-table" lay-skin="line"><colgroup><col width="20%"><col width="40%"><col width="40%"><col></colgroup><thead>' +
+                  '<tr>'+
+                    '<th>疾病种类</th>' +
+                    '<th>图像诊断分数</th>' +
+                    '<th>综合诊断分数</th>' +
+                  '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                  '<tr>' +
+                    '<td>黑色素瘤</td>'+
+                    '<td>' + origin[rectIndex][0] + '</td>' +
+                    '<td>' + dis[rectIndex][0] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>黑色素痣</td>'+
+                    '<td>' + origin[rectIndex][1] + '</td>' +
+                    '<td>' + dis[rectIndex][1] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>痤疮</td>'+
+                    '<td>' + origin[rectIndex][2] + '</td>' +
+                    '<td>' + dis[rectIndex][2] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>荨麻疹</td>'+
+                    '<td>' + origin[rectIndex][3] + '</td>' +
+                    '<td>' + dis[rectIndex][3] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>体癣</td>'+
+                    '<td>' + origin[rectIndex][4] + '</td>' +
+                    '<td>' + dis[rectIndex][4] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>鸡眼</td>'+
+                    '<td>' + origin[rectIndex][5] + '</td>' +
+                    '<td>' + dis[rectIndex][5] + '</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td>白癜风</td>'+
+                    '<td>' + origin[rectIndex][6] + '</td>' +
+                    '<td>' + dis[rectIndex][6] + '</td>' +
+                  '</tr>' +
+                '</tbody>' +
+              '</table>' +
+              '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div> '
+        rectIndex += 1;
+        html += '</div></div > '
+    }
+    
   }
   html += '</form>';
 
@@ -356,6 +423,8 @@ function openMedia() {
     myout.style.display = "none";
     document.getElementById('image').style.display = "none";
     document.getElementById('jcjg').style.display = "none";
+    document.getElementById('ystp').style.display = "none";
+    document.getElementById('sxtbr').style.display = "";
 
   });
   //---------------------------------
@@ -382,6 +451,8 @@ function closeMedia() {
   myout.style.display = "none";
   document.getElementById('image').style.display = "";
   document.getElementById('jcjg').style.display = "none";
+  document.getElementById('ystp').style.display = "";
+  document.getElementById('sxtbr').style.display = "none";
   //document.getElementById('video').style.display="none";
 
 }
@@ -433,6 +504,7 @@ function clickUploader() {
   document.getElementById('video').style.display = "none";
   document.getElementById('image').style.display = "";
   document.getElementById('jcjg').style.display = "none";
+  document.getElementById('ystp').style.display = "";
   fileInput.click();
 
 }
@@ -494,6 +566,7 @@ function drawResult(results) {
   myout.style.display = "";
   document.getElementById('image').style.display = "";
   document.getElementById('jcjg').style.display = "";
+  document.getElementById('ystp').style.display = "";
 }
 
 //把各框截图和问卷循环写到主页

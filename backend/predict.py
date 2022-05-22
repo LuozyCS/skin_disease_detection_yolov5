@@ -154,11 +154,27 @@ def predict(opt, model, img):
         boxes1_belongs_to_boxes = []
         print("--------")
         print(boxes_detected1)
+        
+        #先对boxes处理一次
+        place2index_base = 0
+        while place2index_base < boxes_detected.__len__():
+            place2index_current = place2index_base + 1
+            while place2index_current < boxes_detected.__len__():
+                place = boxes_detected[place2index_base]
+                place1 = boxes_detected[place2index_current]
+            # for place2index, place2 in enumerate(boxes_detected):
+                if abs(place['bbox'][0] - place1['bbox'][0]) < width_thres and abs(place['bbox'][1] - place1['bbox'][1]) < hight_thres \
+                        and abs(place['bbox'][2] - place1['bbox'][2]) < width_thres and abs(place['bbox'][3] - place1['bbox'][3]) < hight_thres:
+                    boxes_detected.pop(place2index_current)
+                else:
+                    place2index_current += 1
+            place2index_base += 1
+
         for place in boxes_detected :
             boxes1_belongs_to_boxes.append([])
             flagFind = 0
             for place1 in boxes_detected1 :
-                print("1")
+                #print("1")
                 if abs(place['bbox'][0] - place1['bbox'][0]) < width_thres and abs(place['bbox'][1] - place1['bbox'][1]) < hight_thres \
                     and abs(place['bbox'][2] - place1['bbox'][2]) < width_thres and abs(place['bbox'][3] - place1['bbox'][3]) < hight_thres: 
                     boxes1_belongs_to_boxes[-1].append(place1)
