@@ -36,11 +36,12 @@ if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobi
   //$('#pcbutton').display("none");
   document.getElementById("pcbutton").style.display = "none";
   var htmlA = '<div id="pcbutton" class="layui-form-item">' +
+                  '<br>' +
                   '<div class="layui-inline" style="color: white;">' +
                     '您正在使用手机端，请：' +
                     '<div class="layui-inline">' +
                       '<div class="layui-inline">' +
-                        '<input type="file" accept="image/*" class="layui-btn layui-btn-primary" style="color: white;" capture="camera" id="picFile" onchange="readPhone(this)" / >'  +
+                        '<input type="file" accept="image/*" class="border-color: rgba(255,255,255,.2);layui-btn layui-btn-primary" style="color: white;" capture="camera" id="picFile" onchange="readPhone(this)" / >'  +
                       '</div>' +
                       // '或&nbsp; &nbsp;' +
                       // '<div class="layui-inline">' +
@@ -219,7 +220,7 @@ function showSuggestions(origin, dis, suggestions, results, question_table) {
       '<li>诊断详情</li>' +
       '</ul>' +
       '<div class="layui-tab-content" style="">' +
-      '<div class="layui-tab-item layui-show">图片序号：' + (rectIndex + 1) + '<br>综合诊断结果为：' + sugges['n'] + '<br>注：该结果综合诊断分数过低（<0.05），可能存在误诊，请患者谨慎判断。' + '<br>治疗建议：' + sugges['s'] + '</div>' +
+      '<div class="layui-tab-item layui-show">图片序号：' + (rectIndex + 1) + '<br>综合诊断结果为：' + sugges['n'] + '<br>治疗建议：' + sugges['s'] +'<br><br><div style="color:red;font-size:medium">注：该结果综合诊断分数过低（<0.05），可能存在误诊，请患者谨慎判断。</div>' + '</div>' +
       '<div class="layui-tab-item">' +
       '各疾病综合诊断分数（0到1，分数越高属于该病的可能性越大）：<br>' +
       '<div style="overflow-x:auto">' +

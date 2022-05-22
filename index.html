@@ -9,7 +9,6 @@
     .layui-form-radio {
       font-size: 10px;
     }
-    
   </style>
 </head>
 
@@ -23,23 +22,42 @@
       <li class="layui-nav-item">
       </li>
     </ul> -->
-  </div>   
+  </div>
   <!-- <h1 class='title'>皮肤病检测项目中期演示</h1> -->
-  <div class=""site-banner-bg"" style="text-align: center;position:relative;background-image: url(/autumn.jpg); background-size: cover;" autumn="">
+  <div class="" site-banner-bg""
+    style="text-align: center;position:relative;background-image: url(/autumn.jpg); background-size: cover;" autumn="">
     <!-- <div class="site-banner-bg" style="background-image: url(/autumn.jpg); background-size: cover;" autumn="">
     </div> -->
+    <br>
+    <p style="padding-top: 15px;font-size: 30px;color: rgba(255,255,255,.8);"> 欢迎使用智能皮肤病诊断平台</p>
+    <p style="color: rgba(255,255,255,.6);">
+      <br>
+      该平台采用深度学习算法结合问诊问卷对使用者所需检测的患病部位进行综合诊断。<br>目前可以识别的皮肤病种类有：黑色素瘤，黑色素痣，痤疮，荨麻疹，体癣，鸡眼，白癜风。<br><br>
+    </p>
+    <div class="layui-inline" style="font-size: small;">  
+      <button data-method="notice" class="layui-btn layui-btn-primary" id="layerHelp"
+      style="border-color: rgba(255,255,255,.0);color:rgba(255,255,255,.6);font-size: small;padding: auto;">点击查看使用教程</button>
+    </div>
+    <br>
+    <br>
     <div id="camera" class="site-banner-main">
       <div id="pcbutton" class="layui-form-item">
         <div class="layui-inline" style="color: white;">
           请选择使用方式：
           <div class="layui-inline">
-            <button id="sxt" type="button" class="layui-btn layui-btn-primary layui-btn-radius site-demo-active" style="color: white;" data-type="setPercent1" onclick="openMedia()">开启摄像头</button>
+            <button id="sxt" type="button" class="layui-btn layui-btn-primary layui-btn-radius site-demo-active"
+              style="border-color: rgba(255,255,255,.2);color: white;" data-type="setPercent1"
+              onclick="openMedia()">开启摄像头</button>
 
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-radius site-demo-active" style="color: white;" data-type="setPercent2" onclick="takePhoto()">拍照</button>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-radius site-demo-active"
+              style="border-color: rgba(255,255,255,.2);color: white;" data-type="setPercent2"
+              onclick="takePhoto()">拍照</button>
           </div>
           或&nbsp; &nbsp;
           <div class="layui-inline">
-            <button type="button" class="layui-btn layui-btn-primary layui-btn-radius site-demo-active" style="color: white;" data-type="setPercent3" onClick="clickUploader()">上传图片</button>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-radius site-demo-active"
+              style="border-color: rgba(255,255,255,.2);color: white;" data-type="setPercent3"
+              onClick="clickUploader()">上传图片</button>
           </div>
         </div>
       </div>
@@ -77,7 +95,8 @@
   <div name="contan2" id="text-container1" class="center" style="width: 40%;text-align: center;">
     <canvas id="canvas" style="display: none; width: 100%;"></canvas>
     <div id="myout" style="display: none;"></div>
-    <br><br><button type="button" id="sendMsgBut" class="layui-btn layui-btn-lg layui-btn-radius site-demo-active" data-type="setPercent4" onclick="sendMsg()" style="display: none;">提交问卷</button><br><br>
+    <br><br><button type="button" id="sendMsgBut" class="layui-btn layui-btn-lg layui-btn-radius site-demo-active"
+      data-type="setPercent4" onclick="sendMsg()" style="display: none;">提交问卷</button><br><br>
   </div>
 
   <script src="frontend/layui.js" charset="utf-8"></script>
@@ -86,26 +105,50 @@
 
   <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
   <script type="text/javascript">
-    layui.use(['element', 'form'], function () {
+    layui.use(['layer', 'element', 'form'], function () {
       var $ = layui.jquery
         , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
       var form = layui.form;
+      var layer = layui.layer;
       form.render('radio');
       //触发事件
       var active = {
-        setPercent1: function(){
+        notice: function () {
+          //示范一个公告层
+          layer.open({
+            type: 1
+            , title: false //不显示标题栏
+            , closeBtn: false
+            , area: '300px;'
+            , shade: 0.8
+            , id: 'LAY_layuipro' //设定一个id，防止重复弹出
+            , btn: ['确定']
+            , btnAlign: 'c'
+            , moveType: 1 //拖拽模式，0或者1
+            , content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">你知道吗？亲！<br>layer ≠ layui<br><br> layer 只是作为 layui 的一个弹层模块，由于其用户基数较大，所以常常会有人以为 layui 是 <del>layerui</del><br><br>layer 虽然已被 Layui 收编为内置的弹层模块，但仍然会作为一个独立组件全力维护、升级 ^_^</div>'
+            , success: function (layero) {
+              // var btn = layero.find('.layui-layer-btn');
+              // btn.find('.layui-layer-btn0').attr({
+              //   href: '../index.html'
+              //   , target: '_blank'
+              // });
+              
+            }
+          });
+        },
+        setPercent1: function () {
           //设置50%进度
           element.progress('demo', '33%')
         },
-        setPercent2: function(){
+        setPercent2: function () {
           //设置50%进度
           element.progress('demo', '66%')
         },
-        setPercent3: function(){
+        setPercent3: function () {
           //设置50%进度
           element.progress('demo', '66%')
         },
-        setPercent4: function(){
+        setPercent4: function () {
           //设置50%进度
           element.progress('demo', '100%')
         },
@@ -141,6 +184,10 @@
 
       element.on('tab(test)', function (elem) {
         location.hash = 'test=' + $(this).attr('lay-id');
+      });
+      $('#layerHelp').on('click', function () {
+        var othis = $(this), method = othis.data('method');
+        active[method] ? active[method].call(this, othis) : '';
       });
 
     });
