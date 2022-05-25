@@ -1,6 +1,7 @@
-var form;
-layui.use('form', function () {
+var form,layer;
+layui.use(['form','layer'], function () {
   form = layui.form;
+  layer = layui.layer;
 });
 
 // var elemlayui;
@@ -67,6 +68,7 @@ function GetUrl() {
 }
 
 function readPhone(obj) {
+  firstFlag = 1;
   var file = obj.files[0];
   //判断类型是不是图片  不难发现这个检测是基于正则表达式的，因此可以进行各种复杂的匹配，非常有用。
   if (!/image\/\w+/.test(file.type)) {
@@ -116,12 +118,24 @@ function communicate(img_base64_url) {
   }).done(function (response_data) {
     //console.log(response_data);
     if (response_data == null && firstFlag == 1) {
+      // alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
       alert("此图片未识别出病变部位，请调整拍摄角度以及灯光")
       document.getElementById("sendMsgBut").style.display = "none";
+      document.getElementById("text-container3").style.display = "";
+      console.log("111111111111")
+      if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+   console.log("111111111111")
+      document.getElementById("text-container3").innerHTML = '<div class="layui-elem-quote" style="font-size:medium;"><p>此图片未识别出病变部位，请调整拍摄角度以及灯光</p></div>';
+      document.getElementById("myout").style.display = "none";
+      document.getElementById("canvas").style.display = "none";
+      }
+      // $('#text-container1').val("此图片未识别出病变部位，请调整拍摄角度以及灯光");
       //elemlayui.progress('demo', '20%');
     }
     else {
       //alert(response_data.class_results[1]['name'])
+      // $('#text-container1').val("");
+      document.getElementById("text-container3").style.display = "none";
       console.log(response_data.class_results)//可以把标准框附件的类输出出来
       console.log(response_data.disease_table)
       console.log(response_data.question_table)
